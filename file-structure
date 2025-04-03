@@ -1,0 +1,6 @@
+/viagem-pwa
+  ├── index.html
+  ├── style.css
+  ├── app.js
+  ├── manifest.json (para PWA)
+  └── service-worker.js (para offline)

@@ -1,0 +1,43 @@
+FUNCIONALIDADES PRIMÁRIAS (MVP)
+
+1. Criar uma Nova Viagem:
+
+- Campo para inserir data de início.
+
+- Campo para definir quantidade de dias.
+
+- Botão "Criar Viagem".
+
+2. Tabela de Dias e Eventos:
+
+- Colunas: Data, Dia da Semana, Localização/Evento.
+
+- Cada linha representa um dia da viagem (gerada automaticamente a partir da data inicial).
+
+- Edição direta nos campos de localização.
+
+3. Adicionar/Remover Dias:
+
+- Botão "Adicionar Dia" (aumenta a quantidade de dias).
+
+- Botão "Remover Dia" (diminui a quantidade de dias).
+
+4. Reordenar Dias via Drag and Drop:
+
+- Permitir arrastar uma linha para outra posição (usaremos a biblioteca Sortable.js para simplificar).
+
+5. Salvar Localmente:
+
+- Usar localStorage para salvar a viagem no navegador (sem backend).
+
+6. Compartilhar Viagem:
+
+- Exportar a viagem como um arquivo JSON ou link (ela pode importar o arquivo no app dela).
+
+O QUE NÃO VAMOS FAZER NESTA ETAPA
+
+- Cadastro/Login: Não é necessário nesta fase. Os dados ficam salvos apenas no navegador local.
+
+- Backend: Tudo será offline-first (se você limpar o cache, os dados se perdem, mas é suficiente para testes).
+
+- Modal de Detalhes: Deixaremos para a próxima etapa.
