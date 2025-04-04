@@ -15,21 +15,42 @@ function parseDate(dateStr) {
     return new Date(`${year}-${month}-${day}`);
 }
 
+//Abrevia os dias da semana
+function getShortWeekday(date) {
+    const longName = date.toLocaleDateString('pt-BR', { weekday: 'long' }).toLowerCase();
+    console.log("Nome completo do dia:", longName); // Verifique no console
+    
+    const weekdays = {
+        'domingo': 'dom',
+        'segunda-feira': 'seg',
+        'terça-feira': 'ter',
+        'quarta-feira': 'qua',
+        'quinta-feira': 'qui',
+        'sexta-feira': 'sex',
+        'sábado': 'sab'
+    };
+    
+    const shortName = weekdays[longName] || '???'; // Fallback para valores não mapeados
+    console.log("Abreviação gerada:", shortName); // Verifique se está correto
+    
+    return shortName;
+}
+
 // Cria/Atualiza a viagem
 function createTrip() {
-    const startDateInput = document.getElementById('startDate').value; // Formato ISO: "AAAA-MM-DD"
-    const [year, month, day] = startDateInput.split('-'); // Divide a data
-    const startDate = new Date(year, month - 1, day); // Cria data LOCAL (evita problemas de fuso horário)
+    const startDateInput = document.getElementById('startDate').value;
+    const [year, month, day] = startDateInput.split('-');
+    const startDate = new Date(year, month - 1, day);
     
     const daysCount = parseInt(document.getElementById('daysCount').value);
     currentTrip = [];
     
     for (let i = 0; i < daysCount; i++) {
         const date = new Date(startDate);
-        date.setDate(date.getDate() + i); // Adiciona "i" dias
+        date.setDate(date.getDate() + i);
         currentTrip.push({
             date: formatDate(date),
-            weekday: date.toLocaleDateString('pt-BR', { weekday: 'long' }),
+            weekday: getShortWeekday(date), // <-- Usando a nova função
             location: ''
         });
     }
@@ -51,7 +72,7 @@ function renderTrip() {
             <div class="event-container">
                 <div class="drag-handle">☰</div>
                 <input type="text" 
-                       placeholder="Ex: RJ→BH" 
+                       placeholder="Ex: Rio de Janeiro" 
                        value="${day.location}" 
                        oninput="updateLocation(${index}, this.value)">
             </div>

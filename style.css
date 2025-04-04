@@ -71,6 +71,10 @@ button:hover {
   align-items: center;
 }
 
+.day {
+  text-transform: capitalize;
+}
+
 .event-container {
   display: flex;
   align-items: center;
@@ -100,9 +104,17 @@ input[type="text"] {
 /* Mobile */
 @media (max-width: 600px) {
   .header-row, .day-row {
-      grid-template-columns: 80px 90px 1fr;
+      grid-template-columns: 70px 50px 1fr; /* Ajuste principal aqui! */
       font-size: 14px;
       padding: 8px;
+  }
+
+  .date {
+      font-size: 13px; /* Novo ajuste para a data */
+  }
+
+  .day {
+    margin-left: 4px;
   }
 
   input, button {
@@ -115,6 +127,6 @@ input[type="text"] {
   }
 
   .drag-handle {
-      padding: 8px;
+      padding: 6px; /* Reduzido de 8px */
   }
 }
