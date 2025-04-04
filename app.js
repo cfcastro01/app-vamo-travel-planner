@@ -17,13 +17,16 @@ function parseDate(dateStr) {
 
 // Cria/Atualiza a viagem
 function createTrip() {
-    const startDate = new Date(document.getElementById('startDate').value);
-    const daysCount = parseInt(document.getElementById('daysCount').value);
+    const startDateInput = document.getElementById('startDate').value; // Formato ISO: "AAAA-MM-DD"
+    const [year, month, day] = startDateInput.split('-'); // Divide a data
+    const startDate = new Date(year, month - 1, day); // Cria data LOCAL (evita problemas de fuso horário)
     
+    const daysCount = parseInt(document.getElementById('daysCount').value);
     currentTrip = [];
+    
     for (let i = 0; i < daysCount; i++) {
         const date = new Date(startDate);
-        date.setDate(date.getDate() + i);
+        date.setDate(date.getDate() + i); // Adiciona "i" dias
         currentTrip.push({
             date: formatDate(date),
             weekday: date.toLocaleDateString('pt-BR', { weekday: 'long' }),
