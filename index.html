@@ -40,6 +40,54 @@
         </div>
     </div>
 
+     <!-- Modal do evento -->
+    <dialog id="eventModal">
+        <form method="dialog">
+            <h2>Detalhes do Evento</h2>
+            
+            <div class="modal-grid">
+                <label>Título:
+                    <input type="text" id="eventTitle" required>
+                </label>
+    
+                <label>Data:
+                    <input type="text" id="eventDate" disabled>
+                </label>
+    
+                <label>Horário Chegada:
+                    <input type="time" id="eventArrival">
+                </label>
+    
+                <label>Horário Partida:
+                    <input type="time" id="eventDeparture">
+                </label>
+    
+                <label>Hospedagem:
+                    <input type="text" id="eventLodging">
+                </label>
+    
+                <label>Endereço:
+                    <input type="text" id="eventAddress">
+                </label>
+    
+                <label>Link:
+                    <input type="url" id="eventLink" placeholder="https://">
+                </label>
+    
+                <label class="full-width">Notas:
+                    <textarea id="eventNotes" rows="3"></textarea>
+                </label>
+            </div>
+    
+            <div class="modal-buttons">
+                <button type="button" onclick="saveEventDetails()">Salvar</button>
+                <button type="button" onclick="document.getElementById('eventModal').close()">Fechar</button>
+            </div>
+        </form>
+    </dialog>
+
+
     <script src="app.js"></script>
+    <script src="js/features/eventModal.js"></script>
 </body>
 </html>
