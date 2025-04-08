@@ -4,7 +4,7 @@ let sortableInstance = null;
 // Função para formatar a data como DD/MM/AAAA
 function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getDate() === 1 ? date.getMonth() + 1 : date.getMonth() + 1).padStart(2, '0'); // Corrigido
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Corrigido: +1 no mês
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
 }
@@ -12,7 +12,7 @@ function formatDate(date) {
 // Converte DD/MM/AAAA para Date (usado no addDay)
 function parseDate(dateStr) {
     const [day, month, year] = dateStr.split('/');
-    return new Date(`${year}-${month}-${day}`);
+    return new Date(year, month - 1, day); // Mês é 0-based (0 = Janeiro)
 }
 
 //Abrevia os dias da semana
@@ -95,11 +95,14 @@ function updateLocation(index, value) {
 function addDay() {
     const lastDateStr = currentTrip[currentTrip.length - 1].date;
     const lastDate = parseDate(lastDateStr);
-    lastDate.setDate(lastDate.getDate() + 1);
+    
+    // Cria nova data SEM timezone (evita bugs de UTC)
+    const nextDate = new Date(lastDate);
+    nextDate.setDate(nextDate.getDate() + 1);
     
     currentTrip.push({
-        date: formatDate(lastDate),
-        weekday: lastDate.toLocaleDateString('pt-BR', { weekday: 'long' }),
+        date: formatDate(nextDate),
+        weekday: getShortWeekday(nextDate), // Usa a função de abreviação
         location: ''
     });
     renderTrip();
