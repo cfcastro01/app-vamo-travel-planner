@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planejador de Viagens</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="css/main.css">
+
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
@@ -15,7 +17,6 @@
         <!-- Controles -->
         <div class="controls">
             <input type="date" id="startDate" required oninput="validateCreateButton()">
-            <!-- Atualiza em tempo real -->
             <input type="number" id="daysCount" min="1" value="7" required>
             <button onclick="createTrip()">Criar Viagem</button>
         </div>
