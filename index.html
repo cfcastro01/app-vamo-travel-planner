@@ -14,10 +14,12 @@
 
         <!-- Controles -->
         <div class="controls">
-            <input type="date" id="startDate" required>
+            <input type="date" id="startDate" required oninput="validateCreateButton()">
+            <!-- Atualiza em tempo real -->
             <input type="number" id="daysCount" min="1" value="7" required>
             <button onclick="createTrip()">Criar Viagem</button>
         </div>
+        
 
         <!-- Tabela de Dias -->
         <div class="trip-table">

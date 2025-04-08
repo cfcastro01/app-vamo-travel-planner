@@ -1,10 +1,18 @@
 let currentTrip = [];
 let sortableInstance = null;
 
+// ========== FUNÇÕES DE VALIDAÇÃO ========== //
+function validateCreateButton() {
+  const dateInput = document.getElementById('startDate');
+  const createBtn = document.querySelector('.controls button');
+  createBtn.disabled = !dateInput.value;
+}
+
+// ========== FUNÇÕES DE FORMATAÇÃO ========== //
 // Função para formatar a data como DD/MM/AAAA
 function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Corrigido: +1 no mês
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
 }
@@ -12,14 +20,12 @@ function formatDate(date) {
 // Converte DD/MM/AAAA para Date (usado no addDay)
 function parseDate(dateStr) {
     const [day, month, year] = dateStr.split('/');
-    return new Date(year, month - 1, day); // Mês é 0-based (0 = Janeiro)
+    return new Date(year, month - 1, day);
 }
 
 //Abrevia os dias da semana
 function getShortWeekday(date) {
     const longName = date.toLocaleDateString('pt-BR', { weekday: 'long' }).toLowerCase();
-    console.log("Nome completo do dia:", longName); // Verifique no console
-    
     const weekdays = {
         'domingo': 'dom',
         'segunda-feira': 'seg',
@@ -29,15 +35,16 @@ function getShortWeekday(date) {
         'sexta-feira': 'sex',
         'sábado': 'sab'
     };
-    
-    const shortName = weekdays[longName] || '???'; // Fallback para valores não mapeados
-    console.log("Abreviação gerada:", shortName); // Verifique se está correto
-    
-    return shortName;
+    return weekdays[longName] || '???';
 }
+
+// ========== FUNÇÕES PRINCIPAIS ========== //
 
 // Cria/Atualiza a viagem
 function createTrip() {
+    const btn = document.querySelector('.controls button');
+    if (btn.disabled) return; // Impede execução se botão estiver desabilitado
+    
     const startDateInput = document.getElementById('startDate').value;
     const [year, month, day] = startDateInput.split('-');
     const startDate = new Date(year, month - 1, day);
@@ -50,7 +57,7 @@ function createTrip() {
         date.setDate(date.getDate() + i);
         currentTrip.push({
             date: formatDate(date),
-            weekday: getShortWeekday(date), // <-- Usando a nova função
+            weekday: getShortWeekday(date),
             location: ''
         });
     }
@@ -159,8 +166,13 @@ document.getElementById('importFile').addEventListener('change', function(e) {
     reader.readAsText(file);
 });
 
-// Inicialização
+// ========== INICIALIZAÇÃO ========== //
 window.onload = () => {
+    // Validação do botão
+    validateCreateButton();
+    document.getElementById('startDate').addEventListener('input', validateCreateButton);
+    
+    // Carrega viagem salva
     const savedTrip = localStorage.getItem('savedTrip');
     if (savedTrip) {
         currentTrip = JSON.parse(savedTrip);
