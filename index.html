@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planejador de Viagens</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
     <link rel="stylesheet" href="css/main.css">
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -44,53 +44,66 @@
     </div>
 
      <!-- Modal do evento -->
-    <dialog id="eventModal">
-        <form method="dialog">
-            <h2>Detalhes do Evento</h2>
-            
-            <div class="modal-grid">
-                <label>Título:
-                    <input type="text" id="eventTitle" required>
+     <dialog id="eventModal">
+        <form onsubmit="event.preventDefault(); handleSave()">
+          <h2>Detalhes do Evento</h2>
+          
+          <div class="modal-grid">
+            <!-- Linha 1 - Título (full width) -->
+            <label>
+              Título:
+              <input type="text" id="eventTitle" required>
+            </label>
+      
+            <!-- Linha 2 - 3 colunas -->
+            <div class="row-third">
+                <label>
+                Data:
+                <input type="text" id="eventDate" disabled>
                 </label>
-    
-                <label>Data:
-                    <input type="text" id="eventDate" disabled>
+      
+                <label>
+                Horário Partida:
+                <input type="time" id="eventDeparture">
                 </label>
-    
-                <label>Horário Chegada:
-                    <input type="time" id="eventArrival">
-                </label>
-    
-                <label>Horário Partida:
-                    <input type="time" id="eventDeparture">
-                </label>
-    
-                <label>Hospedagem:
-                    <input type="text" id="eventLodging">
-                </label>
-    
-                <label>Endereço:
-                    <input type="text" id="eventAddress">
-                </label>
-    
-                <label>Link:
-                    <input type="url" id="eventLink" placeholder="https://">
-                </label>
-    
-                <label class="full-width">Notas:
-                    <textarea id="eventNotes" rows="3"></textarea>
+        
+                <label>
+                Horário Chegada:
+                <input type="time" id="eventArrival">
                 </label>
             </div>
-    
-            <div class="modal-buttons">
-                <button type="button" onclick="saveEventDetails()">Salvar</button>
-                <button type="button" onclick="document.getElementById('eventModal').close()">Fechar</button>
-            </div>
+      
+            <!-- Linhas seguintes (full width) -->
+            <label>
+              Hospedagem:
+              <input type="text" id="eventLodging">
+            </label>
+      
+            <label>
+              Endereço:
+              <input type="text" id="eventAddress">
+            </label>
+      
+            <label>
+              Link:
+              <input type="url" id="eventLink" placeholder="https://">
+            </label>
+      
+            <label>
+              Notas:
+              <textarea id="eventNotes" rows="3"></textarea>
+            </label>
+          </div>
+      
+          <div class="modal-buttons">
+            <button type="submit">Salvar</button>
+            <button type="button" onclick="this.closest('dialog').close()">Fechar</button>
+          </div>
         </form>
-    </dialog>
+      </dialog>
 
 
-    <script src="app.js"></script>
-    <script src="js/features/eventModal.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/eventModal.js"></script>
 </body>
 </html>
