@@ -51,7 +51,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: #555;
 }
 
@@ -67,6 +67,22 @@ body.modal-open {
 .modal-buttons button {
   padding: 8px 16px;
   min-width: 100px;
+}
+
+/* Alternativa para navegadores modernos */
+input[type="time"] {
+  height: 35px; /* Mantém o input original */
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* Popup - máximo que conseguimos customizar */
+input[type="time"]::-webkit-calendar-picker-dropdown {
+  background: white;
+  max-height: 180px;
+  overflow-y: scroll;
 }
 
 @media (max-width: 600px) {

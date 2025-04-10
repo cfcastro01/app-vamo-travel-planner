@@ -4,9 +4,10 @@ let sortableInstance = null;
 // ========== FUNÇÕES DE VALIDAÇÃO ========== //
 function validateCreateButton() {
   const dateInput = document.getElementById('startDate');
-  const createBtn = document.querySelector('.controls button');
+  const createBtn = document.getElementById('createTripBtn');
   createBtn.disabled = !dateInput.value;
 }
+
 
 // ========== FUNÇÕES DE FORMATAÇÃO ========== //
 // Função para formatar a data como DD/MM/AAAA
@@ -156,23 +157,28 @@ function shareTrip() {
 }
 
 // Importar
-document.getElementById('importFile').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        currentTrip = JSON.parse(e.target.result);
-        renderTrip();
-    };
-    reader.readAsText(file);
-});
+// document.getElementById('importFile').addEventListener('change', function(e) {
+//     const file = e.target.files[0];
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//         currentTrip = JSON.parse(e.target.result);
+//         renderTrip();
+//     };
+//     reader.readAsText(file);
+// });
 
 // ========== INICIALIZAÇÃO ========== //
 window.onload = () => {
-    // Validação do botão
+    // Validação do botão (agora independente)
     validateCreateButton();
-    document.getElementById('startDate').addEventListener('input', validateCreateButton);
     
-    // Carrega viagem salva
+    // Listener para validação em tempo real
+    const startDateInput = document.getElementById('startDate');
+    if (startDateInput) {
+        startDateInput.addEventListener('input', validateCreateButton);
+    }
+    
+    // Carrega viagem salva (se existir)
     const savedTrip = localStorage.getItem('savedTrip');
     if (savedTrip) {
         currentTrip = JSON.parse(savedTrip);

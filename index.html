@@ -16,9 +16,15 @@
 
         <!-- Controles -->
         <div class="controls">
-            <input type="date" id="startDate" required oninput="validateCreateButton()">
-            <input type="number" id="daysCount" min="1" value="7" required>
-            <button onclick="createTrip()">Criar Viagem</button>
+            <label>
+                Data de início
+                <input type="date" id="startDate" required oninput="validateCreateButton()">
+            </label>
+            <label>
+                Dias de viagem
+                <input type="number" id="daysCount" min="1" value="7" required>
+            </label>
+            <button id="createTripBtn" onclick="createTrip()">Criar Viagem</button>
         </div>
         
 
@@ -37,9 +43,9 @@
             <button onclick="addDay()">+ Dia</button>
             <button onclick="removeDay()">- Dia</button>
             <button onclick="saveTrip()">Salvar</button>
-            <button onclick="shareTrip()">Compartilhar</button>
+            <!-- <button onclick="shareTrip()">Compartilhar</button>
             <input type="file" id="importFile" hidden>
-            <button onclick="document.getElementById('importFile').click()">Importar</button>
+            <button onclick="document.getElementById('importFile').click()">Importar</button> -->
         </div>
     </div>
 
