@@ -25,7 +25,7 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
-  align-items: flex-end; /* Alinha na base */
+  align-items: flex-end;
 }
 
 label {
@@ -218,15 +218,16 @@ button:disabled {
   .header-row, .day-row {
     grid-template-columns: 0.3fr 0.2fr 1fr;
     padding: 8px;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   /* ===== CÉLULAS DA TABELA ===== */
   .date {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
   }
 
   .day {
+    font-size: 0.875rem;
     margin-left: 4px;
     text-transform: capitalize;
   }
