@@ -36,7 +36,7 @@ body.modal-open {
 .modal-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 24px;
 }
 
 /* Linha com 3 colunas */
@@ -44,7 +44,7 @@ body.modal-open {
   /* display: flex; */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
+  gap: 24px;
 }
 
 .modal-grid label {
@@ -85,6 +85,7 @@ input[type="time"]::-webkit-calendar-picker-dropdown {
   overflow-y: scroll;
 }
 
+/* MOBILE */
 @media (max-width: 600px) {
   #eventModal {
     width: 95%;
@@ -99,8 +100,8 @@ input[type="time"]::-webkit-calendar-picker-dropdown {
   /* Garante que os inputs não fiquem muito apertados */
   .modal-grid input, 
   .modal-grid textarea {
-    font-size: 16px; /* Tamanho maior para mobile */
-    min-height: 44px; /* Área de toque mínima recomendada */
+    font-size: 1rem; /* Tamanho maior para mobile */
+    min-height: 48px; /* Área de toque mínima recomendada */
   }
 
     /* Ajusta os botões para mobile */
