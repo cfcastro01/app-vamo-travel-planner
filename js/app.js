@@ -44,7 +44,7 @@ function getShortWeekday(date) {
 // Cria/Atualiza a viagem
 function createTrip() {
     const btn = document.querySelector('.controls button');
-    if (btn.disabled) return; // Impede execução se botão estiver desabilitado
+    if (btn.disabled) return;
     
     const startDateInput = document.getElementById('startDate').value;
     const [year, month, day] = startDateInput.split('-');
@@ -52,6 +52,9 @@ function createTrip() {
     
     const daysCount = parseInt(document.getElementById('daysCount').value);
     currentTrip = [];
+    
+    // Limpa os eventos salvos para esta viagem
+    localStorage.removeItem('currentTrip');
     
     for (let i = 0; i < daysCount; i++) {
         const date = new Date(startDate);
@@ -119,6 +122,14 @@ function addDay() {
 function removeDay() {
     if (currentTrip.length > 1) {
         currentTrip.pop();
+        
+        // Remove também o último evento salvo se existir
+        const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
+        if (savedEvents.length >= currentTrip.length) {
+            savedEvents.pop();
+            localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
+        }
+        
         renderTrip();
     }
 }
@@ -159,10 +170,23 @@ function shareTrip() {
 // Importar
 // document.getElementById('importFile').addEventListener('change', function(e) {
 //     const file = e.target.files[0];
+//     if (!file) return;
+    
 //     const reader = new FileReader();
 //     reader.onload = (e) => {
-//         currentTrip = JSON.parse(e.target.result);
-//         renderTrip();
+//         try {
+//             currentTrip = JSON.parse(e.target.result);
+//             // Limpa os eventos detalhados ao importar nova viagem
+//             localStorage.removeItem('currentTrip');
+//             renderTrip();
+//             alert('Viagem importada com sucesso!');
+//         } catch (error) {
+//             alert('Erro ao importar o arquivo. Verifique se é um JSON válido.');
+//             console.error('Erro na importação:', error);
+//         }
+//     };
+//     reader.onerror = () => {
+//         alert('Erro ao ler o arquivo.');
 //     };
 //     reader.readAsText(file);
 // });

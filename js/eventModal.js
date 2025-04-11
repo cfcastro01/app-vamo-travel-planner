@@ -60,43 +60,43 @@ function setupTimeInputs() {
 // =============================================
 
 /**
- * Abre o modal de edição de evento
+ * ABRE O MODAL DO EVENTO
  * @param {number} index - Índice do evento na viagem
  */
 function openEventModal(index) {
   currentEditingIndex = index;
   const modal = document.getElementById('eventModal');
-  const trip = JSON.parse(localStorage.getItem('currentTrip')) || [];
   const day = currentTrip[index];
   
   // Preenche os campos com os dados existentes
   document.getElementById('eventDate').value = day.date;
   
-  if (trip[index]) {
-    // Edição de evento existente
-    const event = trip[index];
-    document.getElementById('eventTitle').value = event.title || '';
-    document.getElementById('eventDeparture').value = event.departure || '';
-    document.getElementById('eventArrival').value = event.arrival || '';
-    document.getElementById('eventLodging').value = event.lodging || '';
-    document.getElementById('eventAddress').value = event.address || '';
-    document.getElementById('eventLink').value = event.link || '';
-    document.getElementById('eventNotes').value = event.notes || '';
-  } else {
-    // Novo evento
-    document.getElementById('eventTitle').value = document.querySelectorAll('.event-container input')[index].value || '';
+  // Busca o título do input principal
+  const locationInput = document.querySelectorAll('.event-container input')[index];
+  document.getElementById('eventTitle').value = locationInput.value || '';
+  
+  // Busca eventos salvos
+  const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
+  
+  // Se não há eventos salvos ou não há dados para este índice, limpa os campos
+  if (!savedEvents || !savedEvents[index]) {
     document.getElementById('eventDeparture').value = '';
     document.getElementById('eventArrival').value = '';
     document.getElementById('eventLodging').value = '';
     document.getElementById('eventAddress').value = '';
     document.getElementById('eventLink').value = '';
     document.getElementById('eventNotes').value = '';
+  } else {
+    const event = savedEvents[index];
+    document.getElementById('eventDeparture').value = event.departure || '';
+    document.getElementById('eventArrival').value = event.arrival || '';
+    document.getElementById('eventLodging').value = event.lodging || '';
+    document.getElementById('eventAddress').value = event.address || '';
+    document.getElementById('eventLink').value = event.link || '';
+    document.getElementById('eventNotes').value = event.notes || '';
   }
   
-  // Configura os inputs de tempo
   setupTimeInputs();
-  
-  // Exibe o modal
   document.body.classList.add('modal-open');
   modal.showModal();
   document.getElementById('eventTitle').focus();
@@ -126,12 +126,17 @@ function handleSave() {
 function saveEventDetails() {
   if (currentEditingIndex === null) return false;
   
-  const trip = JSON.parse(localStorage.getItem('currentTrip')) || [];
+  const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
+  const title = document.getElementById('eventTitle').value;
   
-  // Atualiza os dados do evento
-  trip[currentEditingIndex] = {
-    ...trip[currentEditingIndex],
-    title: document.getElementById('eventTitle').value,
+  // Atualiza o título no array principal e no input visível
+  currentTrip[currentEditingIndex].location = title;
+  document.querySelectorAll('.event-container input')[currentEditingIndex].value = title;
+  
+  // Atualiza os detalhes no localStorage
+  savedEvents[currentEditingIndex] = {
+    ...savedEvents[currentEditingIndex],
+    title: title,
     date: document.getElementById('eventDate').value,
     departure: document.getElementById('eventDeparture').value,
     arrival: document.getElementById('eventArrival').value,
@@ -141,8 +146,7 @@ function saveEventDetails() {
     notes: document.getElementById('eventNotes').value
   };
   
-  // Salva no localStorage
-  localStorage.setItem('currentTrip', JSON.stringify(trip));
+  localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
   return true;
 }
 
