@@ -1,3 +1,20 @@
 /* Alternative para Windows/GH Pages */
 @import 'base.css';
 @import 'event-modal.css';
+
+
+/* FONTES */
+
+h1, h2, p, button {
+  font-family: 'Roboto', sans-serif;
+}
+
+label, span {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 500;
+}
+
+input {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+}
