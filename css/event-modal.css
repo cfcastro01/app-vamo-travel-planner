@@ -32,6 +32,11 @@ body.modal-open {
   backdrop-filter: blur(3px);
 }
 
+h2 {
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
 /* ===== FORMULÁRIO DO MODAL ===== */
 .modal-grid {
   display: grid;
@@ -55,6 +60,19 @@ body.modal-open {
   color: #555;
 }
 
+.modal-grid input {
+  padding: 8px 16px;
+  height: 36px;
+}
+
+.modal-grid textarea {
+  min-height: 120px;
+}
+
+.row-third input {
+  font-family: monospace;
+}
+
 .modal-buttons {
   display: flex;
   justify-content: flex-end;
@@ -70,13 +88,13 @@ body.modal-open {
 }
 
 /* Alternativa para navegadores modernos */
-input[type="time"] {
-  height: 35px; /* Mantém o input original */
+/* input[type="time"] {
+  height: 35px;
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-}
+} */
 
 /* Popup - máximo que conseguimos customizar */
 input[type="time"]::-webkit-calendar-picker-dropdown {
@@ -98,10 +116,15 @@ input[type="time"]::-webkit-calendar-picker-dropdown {
   }
 
   /* Garante que os inputs não fiquem muito apertados */
-  .modal-grid input, 
+  .modal-grid input {
+    font-size: 1rem;
+    padding: 12px 16px;
+    
+  }
+
   .modal-grid textarea {
-    font-size: 1rem; /* Tamanho maior para mobile */
-    min-height: 48px; /* Área de toque mínima recomendada */
+    font-size: 1rem;
+    height: 120px;
   }
 
     /* Ajusta os botões para mobile */

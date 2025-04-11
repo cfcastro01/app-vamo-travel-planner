@@ -37,11 +37,12 @@ label {
  }
 
 input, button {
-  padding: 12px 16px;
+  padding: 8px 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
   box-sizing: border-box;
+  min-height: 36px;
 }
 
 button {
@@ -162,21 +163,21 @@ button:disabled {
   }
 
   input, button {
-    padding: 14px 16px; /* Mais altura */
+    padding: 10px 16px;
     border: 1px solid #ddd;
-    border-radius: 8px; /* Bordas mais suaves */
+    border-radius: 4px;
     font-size: 1rem;
-    min-height: 48px; /* Altura mínima acessível */
+    min-height: 48px;
     width: 100%;
   }
 
   label {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Mais espaçamento */
-    font-size: 0.875rem; /* Tamanho um pouco maior */
-    color: #333; /* Cor mais escura */
-    font-weight: 500; /* Peso médio */
+    gap: 8px;
+    font-size: 0.875rem;
+    color: #333;
+    font-weight: 500;
     width: 100%;
   }
 
