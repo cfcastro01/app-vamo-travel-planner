@@ -68,38 +68,25 @@ function openEventModal(index) {
   const modal = document.getElementById('eventModal');
   const day = currentTrip[index];
   
-  // Preenche os campos com os dados existentes
+  // Preenche os campos básicos
   document.getElementById('eventDate').value = day.date;
+  document.getElementById('eventTitle').value = day.location || '';
   
-  // Busca o título do input principal
-  const locationInput = document.querySelectorAll('.event-container input')[index];
-  document.getElementById('eventTitle').value = locationInput.value || '';
-  
-  // Busca eventos salvos
+  // Busca detalhes do localStorage ou do próprio objeto day
   const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
+  const eventDetails = savedEvents[index] || day;
   
-  // Se não há eventos salvos ou não há dados para este índice, limpa os campos
-  if (!savedEvents || !savedEvents[index]) {
-    document.getElementById('eventDeparture').value = '';
-    document.getElementById('eventArrival').value = '';
-    document.getElementById('eventLodging').value = '';
-    document.getElementById('eventAddress').value = '';
-    document.getElementById('eventLink').value = '';
-    document.getElementById('eventNotes').value = '';
-  } else {
-    const event = savedEvents[index];
-    document.getElementById('eventDeparture').value = event.departure || '';
-    document.getElementById('eventArrival').value = event.arrival || '';
-    document.getElementById('eventLodging').value = event.lodging || '';
-    document.getElementById('eventAddress').value = event.address || '';
-    document.getElementById('eventLink').value = event.link || '';
-    document.getElementById('eventNotes').value = event.notes || '';
-  }
+  // Preenche os campos detalhados
+  document.getElementById('eventDeparture').value = eventDetails.departure || '';
+  document.getElementById('eventArrival').value = eventDetails.arrival || '';
+  document.getElementById('eventLodging').value = eventDetails.lodging || '';
+  document.getElementById('eventAddress').value = eventDetails.address || '';
+  document.getElementById('eventLink').value = eventDetails.link || '';
+  document.getElementById('eventNotes').value = eventDetails.notes || '';
   
   setupTimeInputs();
   document.body.classList.add('modal-open');
   modal.showModal();
-  document.getElementById('eventTitle').focus();
 }
 
 /**
@@ -129,24 +116,26 @@ function saveEventDetails() {
   const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
   const title = document.getElementById('eventTitle').value;
   
-  // Atualiza o título no array principal e no input visível
-  currentTrip[currentEditingIndex].location = title;
+  // Atualiza o objeto completo no currentTrip
+  currentTrip[currentEditingIndex] = {
+      ...currentTrip[currentEditingIndex],
+      location: title,
+      title: title,
+      departure: document.getElementById('eventDeparture').value,
+      arrival: document.getElementById('eventArrival').value,
+      lodging: document.getElementById('eventLodging').value,
+      address: document.getElementById('eventAddress').value,
+      link: document.getElementById('eventLink').value,
+      notes: document.getElementById('eventNotes').value
+  };
+  
+  // Atualiza o input visível
   document.querySelectorAll('.event-container input')[currentEditingIndex].value = title;
   
   // Atualiza os detalhes no localStorage
-  savedEvents[currentEditingIndex] = {
-    ...savedEvents[currentEditingIndex],
-    title: title,
-    date: document.getElementById('eventDate').value,
-    departure: document.getElementById('eventDeparture').value,
-    arrival: document.getElementById('eventArrival').value,
-    lodging: document.getElementById('eventLodging').value,
-    address: document.getElementById('eventAddress').value,
-    link: document.getElementById('eventLink').value,
-    notes: document.getElementById('eventNotes').value
-  };
-  
+  savedEvents[currentEditingIndex] = currentTrip[currentEditingIndex];
   localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
+  
   return true;
 }
 

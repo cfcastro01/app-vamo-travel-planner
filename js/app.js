@@ -144,8 +144,19 @@ function initSortable() {
         onEnd: (evt) => {
             const oldIndex = evt.oldIndex;
             const newIndex = evt.newIndex;
-            [currentTrip[oldIndex].location, currentTrip[newIndex].location] = 
-            [currentTrip[newIndex].location, currentTrip[oldIndex].location];
+            
+            // Move o item completo no array principal
+            const movedDay = currentTrip.splice(oldIndex, 1)[0];
+            currentTrip.splice(newIndex, 0, movedDay);
+            
+            // Atualiza também os eventos salvos no localStorage se existirem
+            const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
+            if (savedEvents.length > 0) {
+                const movedEvent = savedEvents.splice(oldIndex, 1)[0];
+                savedEvents.splice(newIndex, 0, movedEvent);
+                localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
+            }
+            
             renderTrip();
         }
     });
