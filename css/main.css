@@ -2,19 +2,9 @@
 @import 'base.css';
 @import 'event-modal.css';
 
-
 /* FONTES */
 
-h1, h2, p, button {
-  font-family: 'Roboto', sans-serif;
-}
-
-label, span {
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 500;
-}
-
-input {
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 600;
-}
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@500;700&family=Rajdhani:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&family=Rajdhani:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');

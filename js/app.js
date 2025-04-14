@@ -86,9 +86,8 @@ function renderTrip() {
                        placeholder="Ex: Rio de Janeiro" 
                        value="${day.location}" 
                        oninput="updateLocation(${index}, this.value)">
-                <button class="event-info-btn" onclick="openEventModal(${index})">ℹ️</button>
-</div>
-                
+                <button class="event-info-btn" onclick="openEventModal(${index})"><i class="fa-solid fa-circle-info"></i></button>
+            </div>   
             </div>
         `;
         daysList.appendChild(row);
