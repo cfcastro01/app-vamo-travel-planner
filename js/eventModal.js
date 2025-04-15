@@ -157,3 +157,35 @@ document.getElementById('eventModal').addEventListener('close', function() {
   document.body.classList.remove('modal-open');
   currentEditingIndex = null;
 });
+
+// Adicionar nova atração
+// function addAttractionField() {
+//   const container = document.querySelector('.attraction-container');
+//   if (!container) return;
+
+//   const newItem = document.createElement('div');
+//   newItem.className = 'row-half-unequal attraction-item';
+//   newItem.innerHTML = `
+//     <label>
+//       Atração:
+//       <input type="text" class="attractionName">
+//     </label>
+//     <label>
+//       Valor (R$):
+//       <input type="number" class="attractionPrice input-valor" min="0" step="50" placeholder="0">
+//     </label>
+//   `;
+  
+//   container.appendChild(newItem);
+// }
+
+// Remover última atração (funciona sempre)
+// function removeLastAttraction() {
+//   const container = document.querySelector('.attraction-container');
+//   const items = container?.querySelectorAll('.attraction-item');
+  
+//   if (items && items.length > 0) {
+//     items[items.length - 1].remove();
+//   }
+// }
+
