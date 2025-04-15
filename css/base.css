@@ -14,14 +14,17 @@ body {
 /* ===== FONTES ===== */
 
 h1 {
-  font-family: "Comfortaa", sans-serif;
-  font-weight: 700;
-  font-size: 3rem;
+  /* font-family: "Comfortaa", sans-serif; */
+  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Rajdhani', sans-serif; */
+  /* font-family: 'Quicksand', sans-serif; */
+  font-weight: 300;
+  font-size: 2.5rem;
   text-align: center;
-  /* color: #2c3e50; */
-  color: #2EC4B6;
+  color: #2c3e50;
+  /* color: #2EC4B6; */
   /* color: #FF9F1C; */
-  margin: 48px 0;
+  /* margin: 48px 0; */
 }
 
 h2 {
@@ -31,20 +34,22 @@ h2 {
 
 h3 {
   font-size: 1.5rem;
-  /* font-family: 'Roboto', sans-serif; */
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Rajdhani', sans-serif; */
+  /* font-family: 'Quicksand', sans-serif; */
+  font-weight: 400;
   color: #333;
 
 }
 
-p, span, button {
+p, button {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: #333;
 }
 
-input, span {
+span {
   font-family: 'Rajdhani', sans-serif;
   font-size: 1rem;
   font-weight: 600;
@@ -62,11 +67,25 @@ label {
  }
 
 input {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
   padding: 8px 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
   min-height: 36px;
+  transition: all 0.3s ease;
+}
+
+input:hover {
+  border: 1px solid #555;
+}
+
+input:focus {
+  outline: none;
+  border: 1.2px solid #FF9F1C;
 }
 
 button {
@@ -113,17 +132,24 @@ button:disabled {
 .logo-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  width: fit-content;
   margin: 24px auto 48px auto;
   /* padding: 1rem 0; */
+}
+
+.logo-container h1 {
+  color: #FF9F1C;
+  text-align: right;
+  width: 100%;
 }
 
 .logo {
   width: 200px;
   height: auto;
   max-width: 100%;
-  margin-bottom: 16px;
+  /* margin-bottom: 8px; */
 }
 
 .controls {
