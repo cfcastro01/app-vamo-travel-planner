@@ -139,14 +139,15 @@ function initSortable() {
     
     sortableInstance = new Sortable(daysList, {
         handle: '.drag-handle',
+        draggable: '.day-row',
         animation: 150,
         onEnd: (evt) => {
             const oldIndex = evt.oldIndex;
             const newIndex = evt.newIndex;
             
-            // Move o item completo no array principal
-            const movedDay = currentTrip.splice(oldIndex, 1)[0];
-            currentTrip.splice(newIndex, 0, movedDay);
+            const tempLocation = currentTrip[oldIndex].location;
+            currentTrip[oldIndex].location = currentTrip[newIndex].location;
+            currentTrip[newIndex].location = tempLocation;
             
             // Atualiza também os eventos salvos no localStorage se existirem
             const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
