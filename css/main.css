@@ -1,10 +1,5 @@
 /* Alternative para Windows/GH Pages */
 @import 'base.css';
+/* @import 'mobile.css'; */
+@import 'global.css';
 @import 'event-modal.css';
-
-/* FONTES */
-
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
