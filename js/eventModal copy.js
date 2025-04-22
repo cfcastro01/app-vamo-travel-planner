@@ -64,6 +64,10 @@ function setupTimeInputs() {
  * @param {number} index - Índice do evento na viagem
  */
 function openEventModal(index) {
+  // currentEditingIndex = index;
+  // const modal = document.getElementById('eventModal');
+  // const day = currentTrip[index];
+
   currentEditingIndex = index;
   const modal = document.getElementById('eventModal');
   const day = currentTrip[index];
@@ -72,6 +76,9 @@ function openEventModal(index) {
   document.getElementById('eventDate').value = day.date;
   document.getElementById('eventTitle').value = day.location || '';
   
+  // Busca detalhes do localStorage ou do próprio objeto day
+  // const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
+  // const eventDetails = savedEvents[index] || day;
   const eventDetails = day;
   
   // Preenche os campos detalhados
@@ -83,36 +90,10 @@ function openEventModal(index) {
   document.getElementById('eventLink').value = eventDetails.link || '';
   document.getElementById('transportPrice').value = eventDetails.transportPrice || '';
   document.getElementById('foodPrice').value = eventDetails.foodPrice || '';
-  // document.getElementById('attractionName').value = eventDetails.attractionName || '';
-  // document.getElementById('attractionPrice').value = eventDetails.attractionPrice || '';
+  document.getElementById('attractionName').value = eventDetails.attractionName || '';
+  document.getElementById('attractionPrice').value = eventDetails.attractionPrice || '';
   document.getElementById('eventNotes').value = eventDetails.notes || '';
-
-  // Limpa e recria os campos de atrações
-  const attractionContainer = document.querySelector('.attraction-container');
-  attractionContainer.innerHTML = '';
-
-  // Preenche com atrações salvas
-  if (eventDetails.attractions && eventDetails.attractions.length > 0) {
-    eventDetails.attractions.forEach(attraction => {
-      const div = document.createElement('div');
-      div.className = 'row-half-unequal attraction-item';
-      div.innerHTML = `
-        <label>
-          Atração:
-          <input type="text" class="attractionName" value="${attraction.name || ''}">
-        </label>
-        <label>
-          Valor (R$):
-          <input type="number" class="attractionPrice input-valor" value="${attraction.price || ''}" min="0" step="10">
-        </label>
-      `;
-      attractionContainer.appendChild(div);
-    });
-  } else {
-    // Adiciona um campo em branco se não houver atrações
-    addAttractionField();
-  }
-
+  
   setupTimeInputs();
   document.body.classList.add('modal-open');
   modal.showModal();
@@ -140,12 +121,11 @@ function saveEventDetails() {
   
   const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
   const title = document.getElementById('eventTitle').value;
-  
 
     // Captura todos os novos campos
     const attractionItems = Array.from(document.querySelectorAll('.attraction-item')).map(item => ({
-      name: item.querySelector('input.attractionName').value,
-      price: item.querySelector('input.attractionPrice').value 
+      name: item.querySelector('.attractionName').value,
+      price: item.querySelector('.attractionPrice').value
     }));
   
   // Atualiza o objeto completo no currentTrip
@@ -171,7 +151,7 @@ function saveEventDetails() {
   // Atualiza os detalhes no localStorage
   savedEvents[currentEditingIndex] = currentTrip[currentEditingIndex];
   localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
- 
+  
   return true;
 }
 
@@ -196,23 +176,25 @@ document.getElementById('eventModal').addEventListener('close', function() {
 
 // Adicionar nova atração
 function addAttractionField() {
+  // const container = document.querySelector('.attraction-container');
+  // if (!container) return;
   const attractionContainer = document.querySelector('.attraction-container');
-  // attractionContainer.innerHTML = ''; // Limpa campos existentes
+  attractionContainer.innerHTML = ''; // Limpa campos existentes
 
   const newItem = document.createElement('div');
   newItem.className = 'row-half-unequal attraction-item';
   newItem.innerHTML = `
     <label>
       Atração:
-      <input type="text" class="attractionName">
+      <input type="text" id="attractionName" class="attractionName">
     </label>
     <label>
       Valor (R$):
-      <input type="number" class="attractionPrice input-valor" min="0" step="10" placeholder="0">
+      <input type="number" id="attractionPrice" class="attractionPrice input-valor" min="0" step="10" placeholder="0">
     </label>
   `;
   
-  attractionContainer.appendChild(newItem);
+  container.appendChild(newItem);
 }
 
 // Remover última atração (funciona sempre)

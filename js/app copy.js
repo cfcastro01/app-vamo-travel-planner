@@ -1,7 +1,5 @@
-// let currentTrip = [];
-let currentTrip = JSON.parse(localStorage.getItem('currentTrip')) || [];
+let currentTrip = [];
 let sortableInstance = null;
-
 
 // ========== FUNÇÕES DE VALIDAÇÃO ========== //
 function validateCreateButton() {
@@ -150,6 +148,10 @@ function initSortable() {
         onEnd: (evt) => {
             const oldIndex = evt.oldIndex;
             const newIndex = evt.newIndex;
+            // // Troca a localização e mantém datas fixas
+            // const tempLocation = currentTrip[oldIndex].location;
+            // currentTrip[oldIndex].location = currentTrip[newIndex].location;
+            // currentTrip[newIndex].location = tempLocation;
 
             // Troca os dias de posição no array
             const temp = currentTrip[oldIndex];
@@ -163,6 +165,7 @@ function initSortable() {
                 savedEvents[oldIndex] = savedEvents[newIndex];
                 savedEvents[newIndex] = tempEvent;
 
+                // localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
                 localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
             }
             
@@ -230,6 +233,4 @@ window.onload = () => {
     }
 };
 
-// Limpar o localStorage e apagar infos de viagem
-// Manter a linha abaixo comentada para salvar infos
 // localStorage.clear();
