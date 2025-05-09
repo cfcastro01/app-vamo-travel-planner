@@ -60,7 +60,6 @@
   align-items: center;
   background: #fff;
   border-bottom: 1px solid #eee;
-  cursor: pointer;
   transition: background 0.2s;
 }
 
@@ -68,6 +67,11 @@
   background: #f8f9fa;
 }
 
+
+/* Apenas a área do evento é arrastável */
+.event-container {
+  cursor: move;
+}
 
 .day {
   text-transform: capitalize;

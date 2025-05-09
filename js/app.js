@@ -90,7 +90,7 @@ function renderTrip() {
         
         row.innerHTML = `
             <!-- Cabeçalho do Dia (sempre visível) -->
-            <div class="day-header" onclick="toggleDetails(${index})">
+            <div class="day-header">
                 <span class="date">${day.date}</span>
                 <span class="day">${day.weekday}</span>
                 <div class="event-container">
@@ -99,9 +99,9 @@ function renderTrip() {
                            placeholder="Ex: Rio de Janeiro" 
                            value="${day.location || ''}" 
                            oninput="updateLocation(${index}, this.value)">
-                    <button class="event-info-btn">
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
+                           <button class="event-info-btn" onclick="toggleDetails(${index})">
+                            <i class="fa-solid fa-chevron-down"></i>
+                            </button>
                 </div>
             </div>
 
@@ -204,6 +204,8 @@ function updateLocation(index, value) {
 
 // Adiciona/Remove dias
 function addDay() {
+    if (currentTrip.length === 0) return; // Prevenção contra array vazio
+
     const lastDateStr = currentTrip[currentTrip.length - 1].date;
     const lastDate = parseDate(lastDateStr);
     
@@ -212,8 +214,8 @@ function addDay() {
     nextDate.setDate(nextDate.getDate() + 1);
     
     currentTrip.push({
-        date: formatDate(date),
-        weekday: getShortWeekday(date),
+        date: formatDate(nextDate),
+        weekday: getShortWeekday(nextDate),
         location: '',
         lodgingPrice: '', // Novo
         transportPrice: '', // Novo
@@ -250,20 +252,36 @@ function initSortable() {
             const oldIndex = evt.oldIndex;
             const newIndex = evt.newIndex;
 
-            // Troca os dias de posição no array
-            const temp = currentTrip[oldIndex];
-            currentTrip[oldIndex] = currentTrip[newIndex];
-            currentTrip[newIndex] = temp;
-            
-            // Atualiza também os eventos salvos no localStorage se existirem
-            const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
-            if (savedEvents.length > 0) {
-                const tempEvent = savedEvents[oldIndex];
-                savedEvents[oldIndex] = savedEvents[newIndex];
-                savedEvents[newIndex] = tempEvent;
+            // Troca APENAS os dados do evento entre os dias
+            const tempLocation = currentTrip[oldIndex].location;
+            const tempEventDetails = { 
+                departure: currentTrip[oldIndex].departure,
+                arrival: currentTrip[oldIndex].arrival,
+                lodging: currentTrip[oldIndex].lodging,
+                lodgingPrice: currentTrip[oldIndex].lodgingPrice,
+                attractions: currentTrip[oldIndex].attractions,
+                notes: currentTrip[oldIndex].notes
+            };
 
-                localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
-            }
+            // Mantém as datas originais, só troca os dados do evento
+            currentTrip[oldIndex].location = currentTrip[newIndex].location;
+            currentTrip[oldIndex].departure = currentTrip[newIndex].departure;
+            currentTrip[oldIndex].arrival = currentTrip[newIndex].arrival;
+            currentTrip[oldIndex].lodging = currentTrip[newIndex].lodging;
+            currentTrip[oldIndex].lodgingPrice = currentTrip[newIndex].lodgingPrice;
+            currentTrip[oldIndex].attractions = currentTrip[newIndex].attractions;
+            currentTrip[oldIndex].notes = currentTrip[newIndex].notes;
+
+            currentTrip[newIndex].location = tempLocation;
+            currentTrip[newIndex].departure = tempEventDetails.departure;
+            currentTrip[newIndex].arrival = tempEventDetails.arrival;
+            currentTrip[newIndex].lodging = tempEventDetails.lodging;
+            currentTrip[newIndex].lodgingPrice = tempEventDetails.lodgingPrice;
+            currentTrip[newIndex].attractions = tempEventDetails.attractions;
+            currentTrip[newIndex].notes = tempEventDetails.notes;
+
+            // Atualiza localStorage
+            localStorage.setItem('currentTrip', JSON.stringify(currentTrip));
             
             renderTrip();
         }
