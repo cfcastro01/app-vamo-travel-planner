@@ -48,15 +48,26 @@
   padding: 16px;
   background: #ecf0f1;
   font-weight: bold;
+  align-items: center;
+  justify-content: center;
+
 }
 
-.day-row {
+.day-header {
   display: grid;
   grid-template-columns: 120px 120px 1fr;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
+  padding: 12px 16px;
   align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
 }
+
+.day-header:hover {
+  background: #f8f9fa;
+}
+
 
 .day {
   text-transform: capitalize;
@@ -68,45 +79,27 @@
   gap: 8px;
 }
 
-.event-container input[type="text"] {
-  flex: 1;
+.event-container input {
+  width: 100%;
+
 }
 
-/* botão do drag and drop */
-.drag-handle {
-  cursor: move;
-  padding: 8px;
-  background: #f8f9fa;
-  border: 1px dashed #ddd;
-  border-radius: 4px;
-  user-select: none;
-  transition: all 0.3s;
+.details-row {
+  padding: 15px;
+  background: #f5f5f5;
+  border-top: none;
 }
 
-.drag-handle:hover {
-  background: #e0e0e0;
+.modal-grid {
+  display: grid;
+  gap: 1rem;
 }
 
-/* botão do modal de evento */
-.event-info-btn {
-  font-size: 1.5rem;
-  color: #2EC4B6;
-  background: rgba(0, 0, 0, 0.0) !important;
-  width: 44px;
-  height: 44px;
-  padding: 0 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
+.row-third, .row-half-unequal {
+  display: grid;
+  gap: 1rem;
 }
 
-.event-info-btn:hover {
-  color: #27A599;
-  background: rgba(0, 0, 0, 0.1) !important;
-}
 
 
 /* ===== MOBILE ===== */

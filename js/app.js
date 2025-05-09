@@ -1,5 +1,13 @@
-// let currentTrip = [];
 let currentTrip = JSON.parse(localStorage.getItem('currentTrip')) || [];
+// outra forma de escrever usando if else
+// let currentTrip;
+// const storedTrip = localStorage.getItem('currentTrip');
+// if (storedTrip) {
+//   currentTrip = JSON.parse(storedTrip);
+// } else {
+//   currentTrip = [];
+// }
+
 let sortableInstance = null;
 
 
@@ -79,23 +87,114 @@ function renderTrip() {
     currentTrip.forEach((day, index) => {
         const row = document.createElement('div');
         row.className = 'day-row';
+        
         row.innerHTML = `
-            <span class="date">${day.date}</span>
-            <span class="day">${day.weekday}</span>
-            <div class="event-container">
-                <div class="drag-handle">☰</div>
-                <input type="text" 
-                       placeholder="Ex: Rio de Janeiro" 
-                       value="${day.location}" 
-                       oninput="updateLocation(${index}, this.value)">
-                <button class="event-info-btn" onclick="openEventModal(${index})"><i class="fa-solid fa-circle-info"></i></button>
-            </div>   
+            <!-- Cabeçalho do Dia (sempre visível) -->
+            <div class="day-header" onclick="toggleDetails(${index})">
+                <span class="date">${day.date}</span>
+                <span class="day">${day.weekday}</span>
+                <div class="event-container">
+                    <div class="drag-handle">☰</div>
+                    <input type="text" 
+                           placeholder="Ex: Rio de Janeiro" 
+                           value="${day.location || ''}" 
+                           oninput="updateLocation(${index}, this.value)">
+                    <button class="event-info-btn">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detalhes Expandíveis -->
+            <div class="details-row" id="details-${index}" style="display: none;">
+                <div class="modal-grid">
+                    <!-- Linha 2 - 3 colunas -->
+                    <div class="row-third">
+                        <label>
+                            Partida:
+                            <input type="time" 
+                                   value="${day.departure || ''}" 
+                                   onchange="updateDeparture(${index}, this.value)">
+                        </label>
+                        
+                        <label>
+                            Chegada:
+                            <input type="time" 
+                                   value="${day.arrival || ''}" 
+                                   onchange="updateArrival(${index}, this.value)">
+                        </label>
+                    </div>
+
+                    <!-- Linha 3 - Hospedagem -->
+                    <div class="row-half-unequal">
+                        <label>
+                            Hospedagem:
+                            <input type="text" 
+                                   value="${day.lodging || ''}" 
+                                   onchange="updateLodging(${index}, this.value)">
+                        </label>
+                        <label>
+                            Valor:
+                            <input type="number" 
+                                   value="${day.lodgingPrice || ''}" 
+                                   onchange="updateLodgingPrice(${index}, this.value)">
+                        </label>
+                    </div>
+
+                    <!-- Adicione os demais campos seguindo o mesmo padrão -->
+                    <!-- Exemplo para Atrações (será necessário ajustar) -->
+                    <div class="attraction-container">
+                        ${renderAttractions(day.attractions, index)}
+                    </div>
+
+                    <!-- Botões para Add/Remover Atrações -->
+                    <div class="attraction-actions">
+                        <button type="button" onclick="addAttractionField(${index})">
+                            + Atração
+                        </button>
+                        <button type="button" onclick="removeAttraction(${index})">
+                            - Atração
+                        </button>
+                    </div>
+                </div>
             </div>
         `;
+        
         daysList.appendChild(row);
     });
 
     initSortable();
+}
+
+// Função auxiliar para renderizar atrações
+function renderAttractions(attractions, dayIndex) {
+    return (attractions || []).map((attraction, attractionIndex) => `
+        <div class="attraction-item">
+            <input type="text" 
+                   value="${attraction.name}" 
+                   onchange="updateAttractionName(${dayIndex}, ${attractionIndex}, this.value)">
+            <input type="number" 
+                   value="${attraction.price}" 
+                   onchange="updateAttractionPrice(${dayIndex}, ${attractionIndex}, this.value)">
+        </div>
+    `).join('');
+}
+
+// Controle expandir/recolher
+function toggleDetails(index) {
+    const details = document.getElementById(`details-${index}`);
+    const icon = details.previousElementSibling.querySelector('i');
+    
+    details.style.display = details.style.display === 'none' ? 'block' : 'none';
+    icon.className = details.style.display === 'none' 
+        ? 'fa-solid fa-chevron-down' 
+        : 'fa-solid fa-chevron-up';
+}
+
+// Exemplo de função de atualização
+function updateDeparture(index, value) {
+    currentTrip[index].departure = value;
+    // Adicione lógica de salvamento automático se desejar
 }
 
 // Atualiza localização
@@ -174,7 +273,7 @@ function initSortable() {
 // Salvar/Compartilhar
 function saveTrip() {
     localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
-    alert('Viagem salva! 🎉');
+    alert('Viagem salva! 🎉🎉🎉');
 }
 
 function shareTrip() {
