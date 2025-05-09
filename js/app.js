@@ -91,15 +91,17 @@ function renderTrip() {
         row.innerHTML = `
             <!-- Cabeçalho do Dia (sempre visível) -->
             <div class="day-header">
-                <span class="date">${day.date}</span>
-                <span class="day">${day.weekday}</span>
+                <div class="date-day">
+                    <span class="date">${day.date}</span>
+                    <span class="day">${day.weekday}</span>
+                </div>
                 <div class="event-container">
                     <div class="drag-handle">☰</div>
                     <input type="text" 
                            placeholder="Ex: Rio de Janeiro" 
                            value="${day.location || ''}" 
                            oninput="updateLocation(${index}, this.value)">
-                           <button class="event-info-btn" onclick="toggleDetails(${index})">
+                           <button class="expand-btn" onclick="toggleDetails(${index})">
                             <i class="fa-solid fa-chevron-down"></i>
                             </button>
                 </div>
