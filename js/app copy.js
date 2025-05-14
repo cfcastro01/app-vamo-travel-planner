@@ -89,7 +89,7 @@ function renderTrip() {
         row.className = 'day-row';
         
         row.innerHTML = `
-            <!-- Cabeçalho do Dia -->
+            <!-- Cabeçalho do Dia (sempre visível) -->
             <div class="day-header">
                 <div class="date-day">
                     <span class="date">${day.date}</span>
@@ -101,36 +101,63 @@ function renderTrip() {
                            placeholder="Ex: Rio de Janeiro" 
                            value="${day.location || ''}" 
                            oninput="updateLocation(${index}, this.value)">
-                    <button class="expand-btn" onclick="toggleDetails(${index})">
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
+                           <button class="expand-btn" onclick="toggleDetails(${index})">
+                            <i class="fa-solid fa-chevron-down"></i>
+                            </button>
                 </div>
             </div>
 
             <!-- Detalhes Expandíveis -->
             <div class="details-row" id="details-${index}" style="display: none;">
-                <div class="expense-buttons">
-                    <!-- Botões para Adicionar Despesas -->
-                    <button class="expense-btn" onclick="openExpenseModal('hospedagem', ${index})">
-                        <i class="fa-solid fa-bed"></i>
-                        <span>Hospedagem</span>
-                    </button>
-                    <button class="expense-btn" onclick="openExpenseModal('transporte', ${index})">
-                        <i class="fa-solid fa-car"></i>
-                        <span>Transporte</span>
-                    </button>
-                    <button class="expense-btn" onclick="openExpenseModal('alimentacao', ${index})">
-                        <i class="fa-solid fa-utensils"></i>
-                        <span>Alimentação</span>
-                    </button>
-                    <button class="expense-btn" onclick="openExpenseModal('atividades', ${index})">
-                        <i class="fa-solid fa-ticket-simple"></i>
-                        <span>Atividades</span>
-                    </button>
-                    <button class="expense-btn" onclick="openExpenseModal('compras', ${index})">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <span>Compras</span>
-                    </button>
+                <div class="modal-grid">
+                    <!-- Linha 2 - Horários -->
+                    <div class="row-equal">
+                        <label>
+                            Partida:
+                            <input type="time" 
+                                   value="${day.departure || ''}" 
+                                   onchange="updateDeparture(${index}, this.value)">
+                        </label>
+                        
+                        <label>
+                            Chegada:
+                            <input type="time" 
+                                   value="${day.arrival || ''}" 
+                                   onchange="updateArrival(${index}, this.value)">
+                        </label>
+                    </div>
+
+                    <!-- Linha 4 - Hospedagem -->
+                    <div class="row-unequal">
+                        <label>
+                            Hospedagem:
+                            <input type="text" 
+                                   value="${day.lodging || ''}" 
+                                   onchange="updateLodging(${index}, this.value)">
+                        </label>
+                        <label>
+                            Valor da hospedagem:
+                            <input type="number" 
+                                   value="${day.lodgingPrice || ''}" 
+                                   onchange="updateLodgingPrice(${index}, this.value)">
+                        </label>
+                    </div>
+
+                    <!-- Adicione os demais campos seguindo o mesmo padrão -->
+                    <!-- Exemplo para Atrações (será necessário ajustar) -->
+                    <div class="attraction-container">
+                        ${renderAttractions(day.attractions, index)}
+                    </div>
+
+                    <!-- Botões para Add/Remover Atrações -->
+                    <div class="attraction-actions">
+                        <button type="button" onclick="addAttractionField(${index})">
+                            + Atração
+                        </button>
+                        <button type="button" onclick="removeAttraction(${index})">
+                            - Atração
+                        </button>
+                    </div>
                 </div>
             </div>
         `;

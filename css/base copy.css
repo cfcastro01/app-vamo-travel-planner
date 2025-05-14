@@ -29,9 +29,8 @@
 .controls {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  align-items: flex-end;
   gap: 16px;
-  margin-bottom: 24px;
+  align-items: flex-end;
 }
 
 /* TABELA DA VIAGEM */
@@ -114,54 +113,28 @@ color: #FFF;
 
 }
 .details-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   padding: 16px;
   background: #f5f5f5;
   border-top: none;
 }
 
-.expense-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-}
-
-.expense-btn {
-  /* height: 48px; */
-  padding: 8px 16px;
-  background: #FFF !important;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  justify-content: center;
-  transition: all 0.3s ease; 
-}
-
-.expense-btn span {
-  margin-left: 4px;
-}
-
-.expense-btn span,
-.expense-btn i {
-  color: #2EC4B6;
-  transition: color 0.3s ease;
-}
-
-.expense-btn:hover {
-  background: #2EC4B6 !important;
-  border-color: #2EC4B6 !important;
-}
-
-.expense-btn:hover span,
-.expense-btn:hover i {
-  color: #FFF !important;
-}
-
-
 .modal-grid {
   display: grid;
+  gap: 1rem;
+}
+
+.row-equal {
+  display: flex;
+  gap: 1rem;
+}
+
+.row-equal label {
+  width: 100%;
+}
+
+.row-unequal {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   gap: 1rem;
 }
 
@@ -175,11 +148,10 @@ color: #FFF;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    gap: 16px;
     align-items: center;
     flex: 1;
     width: 100%;
-    gap: 48px;
-    margin-bottom: 48px;
   }
 
   input, button {
@@ -288,24 +260,9 @@ color: #FFF;
     margin-top: 8px;
     padding: 12px;
   }
-
-  .expense-btn {
-    width: 48px;
-    height: 48px;
-  }
-
-  .expense-btn i {
-    font-size: 1rem;
-    margin: 0 !important;
-  }
-
-  .expense-btn span {
-    display: none;
-  }
-
   /* Ajustes específicos para os grids internos */
   .modal-grid > div {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr !important; /* Força 1 coluna em mobile */
     gap: 24px;
   }
 }
