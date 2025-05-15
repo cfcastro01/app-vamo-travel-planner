@@ -108,10 +108,9 @@
 }
 
 .event-container .expand-btn:hover {
-border: 1px solid #2EC4B6;
-background-color: #2EC4B6;
-color: #FFF;
-
+  border: 1px solid #2EC4B6;
+  background-color: #2EC4B6;
+  color: #FFF;
 }
 .details-row {
   display: flex;
@@ -165,6 +164,99 @@ color: #FFF;
   gap: 1rem;
 }
 
+/* ===== MODAIS DE DESPESAS ===== */
+.expense-modal {
+  width: 90%;
+  max-width: 600px;
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  background: white;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.expense-modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  padding: 24px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2EC4B6;
+}
+
+.modal-header button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.modal-header button:hover {
+  color: #ff0000;
+}
+
+.modal-body {
+  display: grid;
+  gap: 16px;
+}
+
+.row-half,
+.row-third {
+  display: grid;
+  gap: 16px;
+}
+
+.row-half { grid-template-columns: repeat(2, 1fr); }
+.row-third { grid-template-columns: repeat(3, 1fr); }
+
+
+.modal-footer {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-footer button {
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.modal-footer button[type="submit"] {
+  background: #2EC4B6;
+  color: white;
+  border: none;
+}
+
+.modal-footer button[type="button"] {
+  background: #f0f0f0;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.modal-footer button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
 
 
 /* ===== MOBILE ===== */
@@ -220,33 +312,32 @@ color: #FFF;
     border-bottom: none;
   }
 
-    /* ===== CABEÇALHO DO DIA ===== */
-    .day-header {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 0;
-      width: 100%;
-    }
+  /* ===== CABEÇALHO DO DIA ===== */
+  .day-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    width: 100%;
+  }
 
   /* ===== CÉLULAS DA TABELA ===== */
-    .date-day {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      width: 100%;
-    }
+  .date-day {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+  }
 
-    .date-day span {
-      width: 95px;
-    }
-
+  .date-day span {
+    width: 95px;
+  }
 
   /* ===== CONTAINER DE EVENTOS ===== */
    .event-container {
     width: 100%;
     margin-top: 8px;
-    grid-template-columns: 24px 1fr 24px; /* Mantém o grid interno */
+    grid-template-columns: 24px 1fr 24px;
   }
 
   .event-container input[type="text"] {
@@ -282,7 +373,7 @@ color: #FFF;
     transition: all 0.3s;
   }
 
-    /* ===== DETALHES EXPANDÍVEIS ===== */
+  /* ===== DETALHES EXPANDÍVEIS ===== */
   .details-row {
     width: 100%;
     margin-top: 8px;
@@ -308,4 +399,29 @@ color: #FFF;
     grid-template-columns: 1fr !important;
     gap: 24px;
   }
+
+
+  /*  Modais de despesa */
+  .row-half,
+  .row-third {
+    grid-template-columns: 1fr;
+  }
+
+  .expense-modal {
+    width: 95%;
+    margin: 10px;
+  }
+
+  .modal-content {
+    padding: 16px;
+  }
+
+  .modal-header h3 {
+    font-size: 1.3rem;
+  }
+
+  input, select, textarea {
+    padding: 10px;
+  }
 }
+

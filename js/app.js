@@ -11,6 +11,8 @@ let currentTrip = JSON.parse(localStorage.getItem('currentTrip')) || [];
 let sortableInstance = null;
 
 
+
+
 // ========== FUNÇÕES DE VALIDAÇÃO ========== //
 function validateCreateButton() {
   const dateInput = document.getElementById('startDate');
@@ -111,23 +113,23 @@ function renderTrip() {
             <div class="details-row" id="details-${index}" style="display: none;">
                 <div class="expense-buttons">
                     <!-- Botões para Adicionar Despesas -->
-                    <button class="expense-btn" onclick="openExpenseModal('hospedagem', ${index})">
+                    <button class="expense-btn" onclick="openExpenseModal('lodging', ${index})">
                         <i class="fa-solid fa-bed"></i>
                         <span>Hospedagem</span>
                     </button>
-                    <button class="expense-btn" onclick="openExpenseModal('transporte', ${index})">
+                    <button class="expense-btn" onclick="openExpenseModal('transport', ${index})">
                         <i class="fa-solid fa-car"></i>
                         <span>Transporte</span>
                     </button>
-                    <button class="expense-btn" onclick="openExpenseModal('alimentacao', ${index})">
+                    <button class="expense-btn" onclick="openExpenseModal('food', ${index})">
                         <i class="fa-solid fa-utensils"></i>
                         <span>Alimentação</span>
                     </button>
-                    <button class="expense-btn" onclick="openExpenseModal('atividades', ${index})">
+                    <button class="expense-btn" onclick="openExpenseModal('activity', ${index})">
                         <i class="fa-solid fa-ticket-simple"></i>
                         <span>Atividades</span>
                     </button>
-                    <button class="expense-btn" onclick="openExpenseModal('compras', ${index})">
+                    <button class="expense-btn" onclick="openExpenseModal('shopping', ${index})">
                         <i class="fa-solid fa-bag-shopping"></i>
                         <span>Compras</span>
                     </button>
@@ -303,6 +305,46 @@ function shareTrip() {
 //     reader.readAsText(file);
 // });
 
+
+// ======== ABRIR MODAL DE DESPESA ======== //
+// Variáveis globais para controle
+let currentExpenseType = ''; // 'hospedagem', 'transporte', etc.
+let currentExpenseDayIndex = null; // Índice do dia na viagem
+
+// Abre o modal específico
+function openExpenseModal(type, dayIndex) {
+    currentExpenseType = type;
+    currentExpenseDayIndex = dayIndex;
+    
+    const modalId = `${type}Modal`; // Ex: 'hospedagemModal'
+    const modal = document.getElementById(modalId);
+    
+    if (modal) {
+      modal.showModal();
+      // Adiciona classe para estilização específica (opcional)
+      modal.classList.add('active');
+    } else {
+      console.error(`Modal não encontrado: ${modalId}`);
+    }
+  }
+
+// Fecha qualquer modal
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.close();
+      modal.classList.remove('active');
+    }
+  }
+  
+  // Fechar modal ao clicar fora
+  document.querySelectorAll('.expense-modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal(modal.id);
+    });
+  });
+
+
 // ========== INICIALIZAÇÃO ========== //
 window.onload = () => {
     // Validação do botão (agora independente)
@@ -324,4 +366,4 @@ window.onload = () => {
 
 // Limpar o localStorage e apagar infos de viagem
 // Manter a linha abaixo comentada para salvar infos
-// localStorage.clear();
+localStorage.clear();

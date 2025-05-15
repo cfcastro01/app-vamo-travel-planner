@@ -58,102 +58,219 @@
         </div>
     </div>
 
-     <!-- Modal do evento -->
-     <dialog id="eventModal">
-        <form onsubmit="event.preventDefault(); handleSave()">
-          <h2>Detalhes do Evento</h2>
-          
-          <div class="modal-grid">
-            <!-- Linha 1 - Título (full width) -->
-            <label>
-              Título:
-              <input type="text" id="eventTitle" required>
-            </label>
-      
-            <!-- Linha 2 - 3 colunas -->
-            <div class="row-third">
-                <label>
-                Data:
-                <input type="text" id="eventDate" disabled>
-                </label>
-      
-                <label>
-                Horário Partida:
-                <input type="time" id="eventDeparture">
-                </label>
+    <!-- MODAL DE DESPESAS -->
+    <!-- Modal Hospedagem -->
+    <dialog id="lodgingModal" class="expense-modal">
+      <form class="modal-content" onsubmit="event.preventDefault(); salvarHospedagem()">
+        <div class="modal-header">
+          <h3>📌 Hospedagem</h3>
+          <button type="button" onclick="closeModal('lodgingModal')">&times;</button>
+        </div>
         
-                <label>
-                Horário Chegada:
-                <input type="time" id="eventArrival">
-                </label>
-            </div>
-      
-            <!-- Linha 3 - 2 colunas -->
-            <div class="row-half-unequal">
-              <label>
-                Hospedagem:
-                <input type="text" id="eventLodging">
-              </label>
-              <label>
-                Valor (R$):
-                <input type="number" id="lodgingPrice" min="0" step="50" placeholder="0" class="input-valor">
-              </label>
-            </div>
-      
-             <!-- Linha 4 - full width -->
+        <div class="modal-body">
+          <label>
+            Nome da Hospedagem:
+            <input type="text" id="lodgingName" required>
+          </label>
+          
+          <div class="row-third">
             <label>
-              Endereço:
-              <input type="text" id="eventAddress">
+              Check-in:
+              <input type="time" id="lodgingCheckIn">
             </label>
-      
-             <!-- Linha 5 - full width -->
             <label>
-              Link:
-              <input type="url" id="eventLink" placeholder="https://">
-            </label>
-
-          <!-- Linha 6 - 2 colunas -->
-          <div class="row-half-equal">
-            <label>
-              Transporte (R$):
-              <input type="number" id="transportPrice" min="0" step="10" placeholder="0">
-            </label>
-
-            <label>
-              Alimentação (R$):
-              <input type="number" id="foodPrice" min="0" step="10" placeholder="0">
+              Check-out:
+              <input type="time" id="lodgingCheckOut">
             </label>
           </div>
 
-          <!-- Atrações (repetível) -->
-          <div class="attraction-container">
-              <!-- conteúdo criado em eventModal.js -->
-          </div>
+          <label>
+            Endereço:
+            <input type="text" id="lodgingAddress">
+          </label>
 
-          <!-- Botão para adicionar mais atrações -->
-          <div class="attraction-actions">
-            <button type="button" class="add-attraction" onclick="addAttractionField()">
-              + Adicionar Atração
-            </button>
-            <button type="button" class="remove-attraction" onclick="removeLastAttraction()">
-              - Remover Última
-            </button>
-          </div>
-      
-          <!-- Linha 7 - full width -->
+          <label>
+            Link (URL):
+            <input type="url" id="lodgingLink" placeholder="https://">
+          </label>
+
+          <label>
+            Valor Total:
+            <input type="number" id="lodgingValue" min="0" step="50" required>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit">Salvar</button>
+          <button type="button" onclick="closeModal('lodgingModal')">❌ Fechar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal Transporte -->
+    <dialog id="transportModal" class="expense-modal">
+      <form class="modal-content" onsubmit="event.preventDefault(); salvarTransporte()">
+        <div class="modal-header">
+          <h3>🚗 Transporte</h3>
+          <button type="button" onclick="closeModal('transportModal')">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+          <label>
+            Meio de Transporte:
+            <select id="transportType">
+              <option value="carro">Carro</option>
+              <option value="onibus">Ônibus</option>
+              <option value="aviao">Avião</option>
+              <option value="outro">Outro</option>
+            </select>
+          </label>
+
+          <div class="row-half">
             <label>
-              Notas:
-              <textarea id="eventNotes" rows="3"></textarea>
+              Partida:
+              <input type="time" id="transportDeparture">
+            </label>
+            <label>
+              Chegada:
+              <input type="time" id="transportArrival">
             </label>
           </div>
-      
-          <div class="modal-buttons">
-            <button type="submit">Salvar</button>
-            <button type="button" onclick="this.closest('dialog').close()">Fechar</button>
-          </div>
-        </form>
-      </dialog>
 
+          <div class="row-half">
+            <label>
+              Valor:
+              <input type="number" id="transportValue" min="0" step="10" required>
+            </label>
+            <label>
+              Distância (km):
+              <input type="number" id="transportDistance" min="0">
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit">Salvar</button>
+          <button type="button" onclick="closeModal('transportModal')">❌ Fechar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal Alimentação -->
+    <dialog id="foodModal" class="expense-modal">
+      <form class="modal-content" onsubmit="event.preventDefault(); salvarAlimentacao()">
+        <div class="modal-header">
+          <h3>🍴 Alimentação</h3>
+          <button type="button" onclick="closeModal('foodModal')">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+          <label>
+            Local:
+            <input type="text" id="foodName" required>
+          </label>
+
+          <label>
+            Tipo:
+            <select id="foodType">
+              <option value="restaurante">Restaurante</option>
+              <option value="mercado">Mercado</option>
+              <option value="lanche">Lanche</option>
+            </select>
+          </label>
+
+          <label>
+            Valor Total:
+            <input type="number" id="foodValue" min="0" step="10" required>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit">Salvar</button>
+          <button type="button" onclick="closeModal('foodModal')">❌ Fechar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal Atividades -->
+    <dialog id="activityModal" class="expense-modal">
+      <form class="modal-content" onsubmit="event.preventDefault(); salvarAtividade()">
+        <div class="modal-header">
+          <h3>🎡 Atividades</h3>
+          <button type="button" onclick="closeModal('activityModal')">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+          <label>
+            Nome da Atividade:
+            <input type="text" id="activityName" required>
+          </label>
+
+          <label>
+            Endereço:
+            <input type="text" id="activityAddress">
+          </label>
+
+          <div class="row-half">
+            <label>
+              Data:
+              <input type="date" id="activityDate">
+            </label>
+            <label>
+              Horário:
+              <input type="time" id="activityTime">
+            </label>
+          </div>
+
+          <label>
+            Valor:
+            <input type="number" id="activityValue" min="0" step="10" required>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit">Salvar</button>
+          <button type="button" onclick="closeModal('activityModal')">❌ Fechar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal Compras -->
+    <dialog id="shoppingModal" class="expense-modal">
+      <form class="modal-content" onsubmit="event.preventDefault(); salvarCompra()">
+        <div class="modal-header">
+          <h3>🛍️ Compras</h3>
+          <button type="button" onclick="closeModal('shoppingModal')">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+          <label>
+            Nome da Loja:
+            <input type="text" id="shoppingStore" required>
+          </label>
+
+          <label>
+            Endereço:
+            <input type="text" id="shoppingAddress">
+          </label>
+
+          <label>
+            Itens Comprados:
+            <textarea id="shoppingItems" rows="3"></textarea>
+          </label>
+
+          <label>
+            Valor Total:
+            <input type="number" id="shoppingValue" min="0" step="10" required>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit">Salvar</button>
+          <button type="button" onclick="closeModal('shoppingModal')">❌ Fechar</button>
+        </div>
+      </form>
+    </dialog>
 
     <script src="js/app.js"></script>
 </body>
