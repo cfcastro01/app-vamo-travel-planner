@@ -166,13 +166,20 @@
 
 /* ===== MODAIS DE DESPESAS ===== */
 .expense-modal {
+  background: white;
+  margin: 0;
   width: 90%;
   max-width: 600px;
+  max-height: 90vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 0;
-  background: white;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  overflow-y: auto;
 }
 
 .expense-modal::backdrop {
@@ -188,7 +195,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin: 24px 0; 
   border-bottom: 1px solid #eee;
   padding-bottom: 16px;
 }
@@ -202,14 +209,6 @@
 .modal-header button {
   background: none;
   border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #666;
-  transition: color 0.3s;
-}
-
-.modal-header button:hover {
-  color: #ff0000;
 }
 
 .modal-body {
@@ -236,7 +235,6 @@
 
 .modal-footer button {
   padding: 12px 24px;
-  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -245,17 +243,6 @@
   background: #2EC4B6;
   color: white;
   border: none;
-}
-
-.modal-footer button[type="button"] {
-  background: #f0f0f0;
-  color: #666;
-  border: 1px solid #ddd;
-}
-
-.modal-footer button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
 }
 
 

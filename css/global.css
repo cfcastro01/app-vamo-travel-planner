@@ -60,6 +60,7 @@ label {
  }
 
  input, textarea {
+  color: #333;
   font-family: 'Rajdhani', sans-serif;
   font-size: 1rem;
   font-weight: 600;
@@ -69,8 +70,6 @@ label {
   box-sizing: border-box;
   min-height: 36px;
   transition: all 0.3s ease;
-  color: #333;
-
 }
 
 input:hover, textarea:hover {
@@ -96,7 +95,7 @@ button {
   transition: background 0.3s;
 }
 
-button:hover:not(:disabled) { /* Só aplica hover se não estiver desabilitado */
+button:hover:not(:disabled) {
   background: #27A599;
 }
 
@@ -104,6 +103,16 @@ button:hover:not(:disabled) { /* Só aplica hover se não estiver desabilitado *
 button:disabled {
   background: #95a5a6 !important;
   cursor: not-allowed;
+}
+
+.scnd-btn {
+  background: #eee;
+  color: #333;
+  border: 1px solid #bbb;
+}
+
+.scnd-btn:hover {
+  background: #ddd !important;
 }
 
 /* Mensagem de erro (opcional) */
