@@ -129,7 +129,6 @@
 }
 
 .expense-btn {
-  /* height: 48px; */
   padding: 8px 16px;
   background: #FFF !important;
   border: 1px solid #ddd;
@@ -165,7 +164,7 @@
 }
 
 /* ===== MODAIS DE DESPESAS ===== */
-.expense-modal {
+/* .expense-modal {
   background: white;
   margin: 0;
   width: 90%;
@@ -180,9 +179,40 @@
   padding: 0;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
   overflow-y: auto;
+} */
+
+.expense-modal {
+  background: white;
+  margin: auto; /* Centralização horizontal nativa do dialog */
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  bottom: 0;
+  opacity: 0;
+  transform: translate(-50%, 100%);
+  transition: all 0.4s ease-out;
+}
+
+.expense-modal.active {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 .expense-modal::backdrop {
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0);
+  transition: all 0.4s ease;
+}
+
+.expense-modal[open]::backdrop {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(3px);
 }
@@ -216,14 +246,23 @@
   gap: 16px;
 }
 
-.row-half,
-.row-third {
+.row-even {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-.row-half { grid-template-columns: repeat(2, 1fr); }
-.row-third { grid-template-columns: repeat(3, 1fr); }
+.row-odd {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.row-three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
 
 
 .modal-footer {
@@ -248,7 +287,7 @@
 
 /* ===== MOBILE ===== */
 /* ===== MOBILE ===== */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
    /* ===== CONTROLES GERAIS ===== */
    .controls {
     display: flex;
@@ -281,6 +320,7 @@
   span {
     font-size: 1.2rem;
   }
+
   /* ===== ESTRUTURA DA TABELA ===== */
   .trip-table {
     padding: 16px;
@@ -387,18 +427,7 @@
     gap: 24px;
   }
 
-
-  /*  Modais de despesa */
-  .row-half,
-  .row-third {
-    grid-template-columns: 1fr;
-  }
-
-  .expense-modal {
-    width: 95%;
-    margin: 10px;
-  }
-
+  /*  MODAL DE DESPESA */
   .modal-content {
     padding: 16px;
   }
@@ -407,8 +436,13 @@
     font-size: 1.3rem;
   }
 
-  input, select, textarea {
-    padding: 10px;
+  .modal-header button {
+    width: 48px;
+    height: 48px;
+  }
+
+  .row-even, .row-odd, .row-three {
+    grid-template-columns: 1fr;
   }
 }
 

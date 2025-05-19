@@ -311,7 +311,6 @@ function shareTrip() {
 let currentExpenseType = ''; // 'hospedagem', 'transporte', etc.
 let currentExpenseDayIndex = null; // Índice do dia na viagem
 
-// Abre o modal específico
 function openExpenseModal(type, dayIndex) {
     currentExpenseType = type;
     currentExpenseDayIndex = dayIndex;
@@ -366,4 +365,4 @@ window.onload = () => {
 
 // Limpar o localStorage e apagar infos de viagem
 // Manter a linha abaixo comentada para salvar infos
-localStorage.clear();
+// localStorage.clear();

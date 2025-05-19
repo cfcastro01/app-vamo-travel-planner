@@ -68,12 +68,24 @@
         </div>
         
         <div class="modal-body">
-          <label>
-            Nome da Hospedagem:
-            <input type="text" id="lodgingName" required>
-          </label>
+          <div class="row-odd">
+            <label>
+              Tipo de hospedagem:
+              <select id="lodgingType">
+                <option value="hotel">Hotel</option>
+                <option value="pousada">Pousada</option>
+                <option value="apartamento">Apartamento</option>
+                <option value="quarto">Quarto</option>
+              </select>
+            </label>
+            <label>
+              Valor Total:
+              <input type="number" id="lodgingValue" min="0" step="50" required>
+            </label>
+          </div>
           
-          <div class="row-third">
+          <div class="row-even">
+            <!-- <div class="row-third"></div> -->
             <label>
               Check-in:
               <input type="time" id="lodgingCheckIn">
@@ -85,6 +97,11 @@
           </div>
 
           <label>
+            Nome da Hospedagem:
+            <input type="text" id="lodgingName" required>
+          </label>
+
+          <label>
             Endereço:
             <input type="text" id="lodgingAddress">
           </label>
@@ -92,11 +109,6 @@
           <label>
             Link (URL):
             <input type="url" id="lodgingLink" placeholder="https://">
-          </label>
-
-          <label>
-            Valor Total:
-            <input type="number" id="lodgingValue" min="0" step="50" required>
           </label>
         </div>
 
@@ -116,17 +128,23 @@
         </div>
         
         <div class="modal-body">
-          <label>
-            Meio de Transporte:
-            <select id="transportType">
-              <option value="carro">Carro</option>
-              <option value="onibus">Ônibus</option>
-              <option value="aviao">Avião</option>
-              <option value="outro">Outro</option>
-            </select>
-          </label>
+          <div class="row-odd">
+            <label>
+              Meio de Transporte:
+              <select id="transportType">
+                <option value="carro">Carro</option>
+                <option value="onibus">Ônibus</option>
+                <option value="aviao">Avião</option>
+                <option value="outro">Outro</option>
+              </select>
+            </label>
+            <label>
+              Valor:
+              <input type="number" id="transportValue" min="0" step="10" required>
+            </label>
+          </div>
 
-          <div class="row-half">
+          <div class="row-three">
             <label>
               Partida:
               <input type="time" id="transportDeparture">
@@ -135,16 +153,9 @@
               Chegada:
               <input type="time" id="transportArrival">
             </label>
-          </div>
-
-          <div class="row-half">
             <label>
-              Valor:
-              <input type="number" id="transportValue" min="0" step="10" required>
-            </label>
-            <label>
-              Distância (km):
-              <input type="number" id="transportDistance" min="0">
+              Tempo de viagem:
+              <input type="time" id="transportTime">
             </label>
           </div>
         </div>
@@ -165,24 +176,19 @@
         </div>
         
         <div class="modal-body">
+          <div class="row-odd">
+
+            <label>
+              Valor Total:
+              <input type="number" id="foodValue" min="0" step="10" required>
+            </label>
+          </div>
+
           <label>
             Local:
             <input type="text" id="foodName" required>
           </label>
 
-          <label>
-            Tipo:
-            <select id="foodType">
-              <option value="restaurante">Restaurante</option>
-              <option value="mercado">Mercado</option>
-              <option value="lanche">Lanche</option>
-            </select>
-          </label>
-
-          <label>
-            Valor Total:
-            <input type="number" id="foodValue" min="0" step="10" required>
-          </label>
         </div>
 
         <div class="modal-footer">
@@ -201,6 +207,21 @@
         </div>
         
         <div class="modal-body">
+          <div class="row-odd">
+            <label>
+              Tipo:
+              <select id="activityType">
+                <option value="cultural">Cultural</option>
+                <option value="entretenimento">Entretenimento</option>
+                <option value="natureza">Natureza</option>
+                <option value="esporte">Esporte</option>
+              </select>
+            </label>
+            <label>
+              Valor:
+              <input type="number" id="activityValue" min="0" step="10" required>
+            </label>
+          </div>
           <label>
             Nome da Atividade:
             <input type="text" id="activityName" required>
@@ -221,11 +242,6 @@
               <input type="time" id="activityTime">
             </label>
           </div>
-
-          <label>
-            Valor:
-            <input type="number" id="activityValue" min="0" step="10" required>
-          </label>
         </div>
 
         <div class="modal-footer">
@@ -244,10 +260,16 @@
         </div>
         
         <div class="modal-body">
-          <label>
-            Nome da Loja:
-            <input type="text" id="shoppingStore" required>
-          </label>
+          <div class="row-odd">
+            <label>
+              Nome da Loja:
+              <input type="text" id="shoppingStore" required>
+            </label>
+            <label>
+              Valor Total:
+              <input type="number" id="shoppingValue" min="0" step="10" required>
+            </label>
+          </div>
 
           <label>
             Endereço:
@@ -257,11 +279,6 @@
           <label>
             Itens Comprados:
             <textarea id="shoppingItems" rows="3"></textarea>
-          </label>
-
-          <label>
-            Valor Total:
-            <input type="number" id="shoppingValue" min="0" step="10" required>
           </label>
         </div>
 
