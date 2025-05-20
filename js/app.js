@@ -320,7 +320,7 @@ function openExpenseModal(type, dayIndex) {
     
     if (modal) {
       modal.showModal();
-      // Adiciona classe para estilização específica (opcional)
+
       modal.classList.add('active');
     } else {
       console.error(`Modal não encontrado: ${modalId}`);

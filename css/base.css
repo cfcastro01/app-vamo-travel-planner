@@ -186,7 +186,7 @@
   margin: auto; /* Centralização horizontal nativa do dialog */
   width: 90%;
   max-width: 600px;
-  max-height: 90vh;
+  /* max-height: 90vh; */
   border: none;
   border-radius: 6px;
   padding: 0;
@@ -197,13 +197,13 @@
   left: 50%;
   bottom: 0;
   opacity: 0;
-  transform: translate(-50%, 100%);
+  transform: translate3d(-50%, 100%, 0);
   transition: all 0.4s ease-out;
 }
 
 .expense-modal.active {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: translate3d(-50%, 0, 0);
 }
 
 .expense-modal::backdrop {
@@ -266,7 +266,7 @@
 
 
 .modal-footer {
-  margin-top: 24px;
+  margin: 24px 0;
   display: flex;
   gap: 12px;
   justify-content: flex-end;
@@ -427,7 +427,7 @@
     gap: 24px;
   }
 
-  /*  MODAL DE DESPESA */
+  /*  MODAL DE DESPESA */  
   .modal-content {
     padding: 16px;
   }
