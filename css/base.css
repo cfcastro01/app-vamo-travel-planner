@@ -264,7 +264,6 @@
   gap: 16px;
 }
 
-
 .modal-footer {
   margin: 24px 0;
   display: flex;
@@ -422,10 +421,10 @@
   }
 
   /* Ajustes específicos para os grids internos */
-  .modal-grid > div {
+  /* .modal-grid > div {
     grid-template-columns: 1fr !important;
     gap: 24px;
-  }
+  } */
 
   /*  MODAL DE DESPESA */  
   .modal-content {

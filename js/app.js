@@ -53,7 +53,7 @@ function getShortWeekday(date) {
 
 // ========== FUNÇÕES PRINCIPAIS ========== //
 
-// Cria/Atualiza a viagem
+// ===== Cria/Atualiza a viagem ===== //
 function createTrip() {
     const btn = document.querySelector('.controls button');
     if (btn.disabled) return;
@@ -81,7 +81,7 @@ function createTrip() {
     renderTrip();
 }
 
-// Renderiza a tabela
+// ===== Renderizar tabela ===== //
 function renderTrip() {
     const daysList = document.getElementById('daysList');
     daysList.innerHTML = '';
@@ -144,18 +144,18 @@ function renderTrip() {
 }
 
 // Função auxiliar para renderizar atrações
-function renderAttractions(attractions, dayIndex) {
-    return (attractions || []).map((attraction, attractionIndex) => `
-        <div class="attraction-item">
-            <input type="text" 
-                   value="${attraction.name}" 
-                   onchange="updateAttractionName(${dayIndex}, ${attractionIndex}, this.value)">
-            <input type="number" 
-                   value="${attraction.price}" 
-                   onchange="updateAttractionPrice(${dayIndex}, ${attractionIndex}, this.value)">
-        </div>
-    `).join('');
-}
+// function renderAttractions(attractions, dayIndex) {
+//     return (attractions || []).map((attraction, attractionIndex) => `
+//         <div class="attraction-item">
+//             <input type="text" 
+//                    value="${attraction.name}" 
+//                    onchange="updateAttractionName(${dayIndex}, ${attractionIndex}, this.value)">
+//             <input type="number" 
+//                    value="${attraction.price}" 
+//                    onchange="updateAttractionPrice(${dayIndex}, ${attractionIndex}, this.value)">
+//         </div>
+//     `).join('');
+// }
 
 // Controle expandir/recolher
 function toggleDetails(index) {
@@ -169,17 +169,17 @@ function toggleDetails(index) {
 }
 
 // Exemplo de função de atualização
-function updateDeparture(index, value) {
-    currentTrip[index].departure = value;
-    // Adicione lógica de salvamento automático se desejar
-}
+// function updateDeparture(index, value) {
+//     currentTrip[index].departure = value;
+// }
 
 // Atualiza localização
 function updateLocation(index, value) {
     currentTrip[index].location = value;
+    saveTrip();
 }
 
-// Adiciona/Remove dias
+// ===== Adiciona/Remove dias ====== //
 function addDay() {
     if (currentTrip.length === 0) return; // Prevenção contra array vazio
 
@@ -194,12 +194,13 @@ function addDay() {
         date: formatDate(nextDate),
         weekday: getShortWeekday(nextDate),
         location: '',
-        lodgingPrice: '', // Novo
-        transportPrice: '', // Novo
-        foodPrice: '', // Novo
-        attractions: [] // Novo
+        lodgingPrice: '',
+        transportPrice: '',
+        foodPrice: '', 
+        attractions: []
       });
     renderTrip();
+    saveTrip();
 }
 
 function removeDay() {
@@ -207,17 +208,63 @@ function removeDay() {
         currentTrip.pop();
         
         // Remove também o último evento salvo se existir
-        const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
-        if (savedEvents.length >= currentTrip.length) {
-            savedEvents.pop();
-            localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
-        }
+        // const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
+        // if (savedEvents.length >= currentTrip.length) {
+        //     savedEvents.pop();
+        //     localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
+        // }
         
         renderTrip();
+        saveTrip();
     }
 }
 
 // Drag and Drop
+// function initSortable() {
+//     if (sortableInstance) sortableInstance.destroy();
+    
+//     sortableInstance = new Sortable(daysList, {
+//         handle: '.drag-handle',
+//         draggable: '.day-row',
+//         animation: 150,
+//         onEnd: (evt) => {
+//             const oldIndex = evt.oldIndex;
+//             const newIndex = evt.newIndex;
+
+//             // Troca APENAS os dados do evento entre os dias
+//             const tempLocation = currentTrip[oldIndex].location;
+//             const tempEventDetails = { 
+//                 departure: currentTrip[oldIndex].departure,
+//                 arrival: currentTrip[oldIndex].arrival,
+//                 lodging: currentTrip[oldIndex].lodging,
+//                 lodgingPrice: currentTrip[oldIndex].lodgingPrice,
+//                 attractions: currentTrip[oldIndex].attractions,
+//                 notes: currentTrip[oldIndex].notes
+//             };
+
+//             // Mantém as datas originais, só troca os dados do evento
+//             currentTrip[oldIndex].location = currentTrip[newIndex].location;
+//             currentTrip[oldIndex].departure = currentTrip[newIndex].departure;
+//             currentTrip[oldIndex].arrival = currentTrip[newIndex].arrival;
+//             currentTrip[oldIndex].lodging = currentTrip[newIndex].lodging;
+//             currentTrip[oldIndex].lodgingPrice = currentTrip[newIndex].lodgingPrice;
+//             currentTrip[oldIndex].attractions = currentTrip[newIndex].attractions;
+//             currentTrip[oldIndex].notes = currentTrip[newIndex].notes;
+
+//             currentTrip[newIndex].location = tempLocation;
+//             currentTrip[newIndex].departure = tempEventDetails.departure;
+//             currentTrip[newIndex].arrival = tempEventDetails.arrival;
+//             currentTrip[newIndex].lodging = tempEventDetails.lodging;
+//             currentTrip[newIndex].lodgingPrice = tempEventDetails.lodgingPrice;
+//             currentTrip[newIndex].attractions = tempEventDetails.attractions;
+//             currentTrip[newIndex].notes = tempEventDetails.notes;
+            
+//             renderTrip();
+//             saveTrip();
+//         }
+//     });
+// }
+
 function initSortable() {
     if (sortableInstance) sortableInstance.destroy();
     
@@ -229,9 +276,9 @@ function initSortable() {
             const oldIndex = evt.oldIndex;
             const newIndex = evt.newIndex;
 
-            // Troca APENAS os dados do evento entre os dias
-            const tempLocation = currentTrip[oldIndex].location;
-            const tempEventDetails = { 
+            // Troca APENAS os dados do evento (mantém datas originais)
+            const tempEventData = { 
+                location: currentTrip[oldIndex].location,
                 departure: currentTrip[oldIndex].departure,
                 arrival: currentTrip[oldIndex].arrival,
                 lodging: currentTrip[oldIndex].lodging,
@@ -240,7 +287,7 @@ function initSortable() {
                 notes: currentTrip[oldIndex].notes
             };
 
-            // Mantém as datas originais, só troca os dados do evento
+            // Move os dados do novo índice para o antigo
             currentTrip[oldIndex].location = currentTrip[newIndex].location;
             currentTrip[oldIndex].departure = currentTrip[newIndex].departure;
             currentTrip[oldIndex].arrival = currentTrip[newIndex].arrival;
@@ -249,80 +296,64 @@ function initSortable() {
             currentTrip[oldIndex].attractions = currentTrip[newIndex].attractions;
             currentTrip[oldIndex].notes = currentTrip[newIndex].notes;
 
-            currentTrip[newIndex].location = tempLocation;
-            currentTrip[newIndex].departure = tempEventDetails.departure;
-            currentTrip[newIndex].arrival = tempEventDetails.arrival;
-            currentTrip[newIndex].lodging = tempEventDetails.lodging;
-            currentTrip[newIndex].lodgingPrice = tempEventDetails.lodgingPrice;
-            currentTrip[newIndex].attractions = tempEventDetails.attractions;
-            currentTrip[newIndex].notes = tempEventDetails.notes;
+            // Coloca os dados temporários no novo índice
+            currentTrip[newIndex].location = tempEventData.location;
+            currentTrip[newIndex].departure = tempEventData.departure;
+            currentTrip[newIndex].arrival = tempEventData.arrival;
+            currentTrip[newIndex].lodging = tempEventData.lodging;
+            currentTrip[newIndex].lodgingPrice = tempEventData.lodgingPrice;
+            currentTrip[newIndex].attractions = tempEventData.attractions;
+            currentTrip[newIndex].notes = tempEventData.notes;
 
-            // Atualiza localStorage
-            localStorage.setItem('currentTrip', JSON.stringify(currentTrip));
-            
-            renderTrip();
+            saveTrip(); 
+            renderTrip(); 
         }
     });
 }
 
-// Salvar/Compartilhar
+// ====== SALVAR VIAGEM ====== //
+
+let saveTimeout;
+// Salvamento automático
 function saveTrip() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
     localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
-    alert('Viagem salva! 🎉🎉🎉');
+    console.log('Salvando...'); // Remova o alerta
+  }, 500); // Salva após 0.5s da última alteração
 }
 
-function shareTrip() {
-    const data = JSON.stringify(currentTrip);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'viagem.json';
-    a.click();
+// Salvamento manual (instantâneo)
+function manualSaveTrip() {
+  clearTimeout(saveTimeout); // Cancela o debounce pendente
+  localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
+  alert('Viagem salva! ✅'); // Feedback diferente
 }
-
-// Importar
-// document.getElementById('importFile').addEventListener('change', function(e) {
-//     const file = e.target.files[0];
-//     if (!file) return;
-    
-//     const reader = new FileReader();
-//     reader.onload = (e) => {
-//         try {
-//             currentTrip = JSON.parse(e.target.result);
-//             // Limpa os eventos detalhados ao importar nova viagem
-//             localStorage.removeItem('currentTrip');
-//             renderTrip();
-//             alert('Viagem importada com sucesso!');
-//         } catch (error) {
-//             alert('Erro ao importar o arquivo. Verifique se é um JSON válido.');
-//             console.error('Erro na importação:', error);
-//         }
-//     };
-//     reader.onerror = () => {
-//         alert('Erro ao ler o arquivo.');
-//     };
-//     reader.readAsText(file);
-// });
 
 
 // ======== ABRIR MODAL DE DESPESA ======== //
 // Variáveis globais para controle
-let currentExpenseType = ''; // 'hospedagem', 'transporte', etc.
-let currentExpenseDayIndex = null; // Índice do dia na viagem
+let currentExpenseType = ''; // Guarda o tipo de despesa selecionado (ex: 'hospedagem')
+let currentExpenseDayIndex = null; // Guarda o índice/dia da viagem selecionado
 
 function openExpenseModal(type, dayIndex) {
-    currentExpenseType = type;
-    currentExpenseDayIndex = dayIndex;
+    // Atualiza as variáveis globais com os valores recebidos
+    currentExpenseType = type; // Ex: Define 'hospedagem' como tipo atual
+    currentExpenseDayIndex = dayIndex; // Ex: Define 2 (terceiro dia) como dia atual
     
-    const modalId = `${type}Modal`; // Ex: 'hospedagemModal'
-    const modal = document.getElementById(modalId);
+    // Cria o ID do modal baseado no tipo (concatenação)
+    const modalId = `${type}Modal`; // Resultado: 'hospedagemModal' (template string)
+    // Busca o elemento do modal no DOM
+    const modal = document.getElementById(modalId); // Procura por id="hospedagemModal"
     
+    // Verifica se o modal foi encontrado
     if (modal) {
+    // Abre o modal (método nativo do HTMLDialogElement)
       modal.showModal();
-
+    // Adiciona classe CSS para estilização
       modal.classList.add('active');
     } else {
+    // Mensagem de erro se o modal não existir
       console.error(`Modal não encontrado: ${modalId}`);
     }
   }
