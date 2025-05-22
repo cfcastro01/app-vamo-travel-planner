@@ -41,6 +41,13 @@ h3 {
   color: #2c3e50;
 }
 
+h4 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
 p, span {
   font-family: 'Rajdhani', sans-serif;
   font-size: 1rem;

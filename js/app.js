@@ -115,11 +115,6 @@ function renderTrip() {
             <!-- Detalhes Expandíveis -->
             <div class="details-row" id="details-${index}" style="display: none;">
 
-                <!-- Cards de Despesas -->
-                <div class="expense-cards">
-                    ${renderExpenseCards(day.expenses)}
-                </div>
-
                 <div class="expense-buttons">
                     <!-- Botões para Adicionar Despesas -->
                     <button class="expense-btn" onclick="openExpenseModal('lodging', ${index})">
@@ -142,6 +137,11 @@ function renderTrip() {
                         <i class="fa-solid fa-bag-shopping"></i>
                         <span>Compras</span>
                     </button>
+                </div>
+
+                <!-- Cards de Despesas -->
+                <div class="expense-cards">
+                    ${renderExpenseCards(day.expenses)}
                 </div>
             </div>
         `;
@@ -361,39 +361,73 @@ function saveExpense() {
   renderTrip();
 }
 
-// RENDERIZAR CARDS (ATUALIZADA) //
+// RENDERIZAR CARDS DE DESPESA //
 function renderExpenseCards(expenses) {
-  return Object.keys(expenses).map(type => 
+    // Mapeamento dos tipos para português
+  const typeNames = {
+    lodging: 'HOSPEDAGEM',
+    transport: 'TRANSPORTE',
+    food: 'ALIMENTAÇÃO',
+    activity: 'ATIVIDADE',
+    shopping: 'COMPRAS'
+  };
+
+return Object.keys(expenses).map(type => 
     expenses[type].map((expense, index) => `
       <div class="expense-card" data-type="${type}">
-        <h4>${type.toUpperCase()}</h4>
+        <div class="card-header">
+          <h4>${typeNames[type]}</h4>
+          <div class="card-actions">
+            <button onclick="editExpense('${type}', ${index})">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteExpense('${type}', ${index})">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
         ${type === 'lodging' ? `
           <p>${expense.name} (${expense.type})</p>
-          <p>Check-in: ${expense.checkin}</p>
+          <p>Check-in: ${expense.checkIn} | Check-out: ${expense.checkOut}</p>
+          ${expense.link ? `<p><a href="${expense.link}" target="_blank">🔗 Link</a></p>` : ''}
         ` : ''}
         ${type === 'transport' ? `
-          <p>${expense.type} - Partida: ${expense.departure}</p>
+          <p>${expense.type} - ${expense.departure} → ${expense.destination}</p>
+          <p>Duração: ${expense.time}</p>
         ` : ''}
-        <p>Valor: R$ ${expense.value.toFixed(2)}</p>
+        <p class="expense-value">R$ ${expense.value.toFixed(2)}</p>
       </div>
     `).join('')
   ).join('');
 }
 
+
 // EDITAR DESPESA //
 function editExpense(type, expenseIndex) {
   const expense = currentTrip[currentExpenseDayIndex].expenses[type][expenseIndex];
-  
-  // Preenche o modal
   const modal = document.getElementById(`${type}Modal`);
-  modal.querySelector('#descricao').value = expense.description;
-  modal.querySelector('#custo').value = expense.cost;
-  
-  // Abre o modal em modo edição
-  currentExpenseType = type;
+
+  // Preenche todos os campos do modal baseado no tipo
+  if (type === 'lodging') {
+    modal.querySelector('#lodgingType').value = expense.type;
+    modal.querySelector('#lodgingValue').value = expense.value;
+    modal.querySelector('#lodgingCheckIn').value = expense.checkIn;
+    modal.querySelector('#lodgingCheckOut').value = expense.checkOut;
+    modal.querySelector('#lodgingName').value = expense.name;
+    modal.querySelector('#lodgingAddress').value = expense.address;
+    modal.querySelector('#lodgingLink').value = expense.link;
+  }
+  else if (type === 'transport') {
+    modal.querySelector('#transportType').value = expense.type;
+    modal.querySelector('#transportValue').value = expense.value;
+    modal.querySelector('#transportDeparture').value = expense.departure;
+    modal.querySelector('#transportArrival').value = expense.arrival;
+    modal.querySelector('#transportTime').value = expense.time;
+  }
+
   modal.showModal();
   
-  // Substitui o evento de salvamento
+  // Atualiza o evento de submit para edição
   modal.querySelector('form').onsubmit = (e) => {
     e.preventDefault();
     updateExpense(expenseIndex);
@@ -402,19 +436,28 @@ function editExpense(type, expenseIndex) {
 
 // ATUALIZAR DESPESA //
 function updateExpense(expenseIndex) {
-  const modal = document.getElementById(`${currentExpenseType}Modal`);
-  const description = modal.querySelector('#descricao').value;
-  const cost = parseFloat(modal.querySelector('#custo').value);
+  const type = currentExpenseType;
+  const modal = document.getElementById(`${type}Modal`);
+  const dayIndex = currentExpenseDayIndex;
 
-  currentTrip[currentExpenseDayIndex].expenses[currentExpenseType][expenseIndex] = {
-    id: Date.now(),
-    description,
-    cost,
-    type: currentExpenseType
+  // Coleta os dados atualizados
+  const updatedData = {};
+  if (type === 'lodging') {
+    updatedData.type = modal.querySelector('#lodgingType').value;
+    updatedData.value = parseFloat(modal.querySelector('#lodgingValue').value);
+    updatedData.checkIn = modal.querySelector('#lodgingCheckIn').value;
+    // ... colete todos os campos
+  }
+  // Repita para outros tipos...
+
+  // Atualiza os dados
+  currentTrip[dayIndex].expenses[type][expenseIndex] = {
+    ...currentTrip[dayIndex].expenses[type][expenseIndex],
+    ...updatedData
   };
-  
+
   saveTrip();
-  closeModal(`${currentExpenseType}Modal`);
+  closeModal(`${type}Modal`);
   renderTrip();
 }
 

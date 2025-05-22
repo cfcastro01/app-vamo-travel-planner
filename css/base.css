@@ -157,7 +157,6 @@
   color: #FFF !important;
 }
 
-
 .modal-grid {
   display: grid;
   gap: 1rem;
@@ -165,47 +164,48 @@
 
 /* ===== CARDS DE DESPESAS ===== */
 .expense-card {
-  background: var(--bg-secondary);
-  border-radius: 8px;
+  background: #FFF;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   padding: 1rem;
   margin: 0.5rem 0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.expense-card__header {
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
-.expense-card__type {
-  color: var(--primary-color);
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.expense-card__content p {
-  margin: 0.25rem 0;
-  color: var(--text-muted);
-}
-
-.expense-card__actions {
+.card-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
-.expense-card__actions button {
+.card-actions button {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-primary);
+  color: #555;
+  transition: all 0.3s;
+  padding: 0.5rem;
 }
 
-/* Adaptação para hospedagem */
-[data-type="lodging"] .expense-card__type {
-  color: #4CAF50; /* Cor específica para hospedagem */
+.card-actions button:hover {
+  background: #2EC4B6 !important;
+  color: #FFF;
+  transform: scale(1.1);
+  /* width: 48px; */
 }
+
+.expense-value {
+  font-weight: 600;
+  color: #2ecc71;
+  margin-top: 1rem;
+}
+
 
 /* ===== MODAIS DE DESPESAS ===== */
 .expense-modal {
