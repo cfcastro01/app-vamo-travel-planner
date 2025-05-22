@@ -52,22 +52,22 @@
             <button onclick="addDay()">+ Dia</button>
             <button onclick="removeDay()">- Dia</button>
             <button onclick="manualSaveTrip()">Salvar Viagem</button>
-            <!-- <button onclick="shareTrip()">Compartilhar</button>
-            <input type="file" id="importFile" hidden>
-            <button onclick="document.getElementById('importFile').click()">Importar</button> -->
         </div>
     </div>
 
     <!-- MODAL DE DESPESAS -->
     <!-- Modal Hospedagem -->
     <dialog id="lodgingModal" class="expense-modal">
-      <form class="modal-content" onsubmit="event.preventDefault(); salvarHospedagem()">
+      <form class="modal-content" onsubmit="event.preventDefault(); saveExpense()">
         <div class="modal-header">
           <h3>📌 Hospedagem</h3>
-          <button type="button" class="scnd-btn" onclick="closeModal('lodgingModal')"><i class="fa-solid fa-xmark"></i></button>
+          <button type="button" class="scnd-btn" onclick="closeModal('lodgingModal')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
         
         <div class="modal-body">
+          <!-- Campos EXISTENTES (mantive todos os IDs originais) -->
           <div class="row-odd">
             <label>
               Tipo de hospedagem:
@@ -85,7 +85,6 @@
           </div>
           
           <div class="row-even">
-            <!-- <div class="row-third"></div> -->
             <label>
               Check-in:
               <input type="time" id="lodgingCheckIn">
@@ -121,7 +120,7 @@
 
     <!-- Modal Transporte -->
     <dialog id="transportModal" class="expense-modal">
-      <form class="modal-content" onsubmit="event.preventDefault(); salvarTransporte()">
+      <form class="modal-content" onsubmit="event.preventDefault(); saveExpense()">
         <div class="modal-header">
           <h3>🚗 Transporte</h3>
           <button type="button" class="scnd-btn" onclick="closeModal('transportModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -169,7 +168,7 @@
 
     <!-- Modal Alimentação -->
     <dialog id="foodModal" class="expense-modal">
-      <form class="modal-content" onsubmit="event.preventDefault(); salvarAlimentacao()">
+      <form class="modal-content" onsubmit="event.preventDefault(); saveExpense()">
         <div class="modal-header">
           <h3>🍴 Alimentação</h3>
           <button type="button" class="scnd-btn" onclick="closeModal('foodModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -200,7 +199,7 @@
 
     <!-- Modal Atividades -->
     <dialog id="activityModal" class="expense-modal">
-      <form class="modal-content" onsubmit="event.preventDefault(); salvarAtividade()">
+      <form class="modal-content" onsubmit="event.preventDefault(); saveExpense()">
         <div class="modal-header">
           <h3>🎡 Atividades</h3>
           <button type="button" class="scnd-btn" onclick="closeModal('activityModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -253,7 +252,7 @@
 
     <!-- Modal Compras -->
     <dialog id="shoppingModal" class="expense-modal">
-      <form class="modal-content" onsubmit="event.preventDefault(); salvarCompra()">
+      <form class="modal-content" onsubmit="event.preventDefault(); saveExpense()">
         <div class="modal-header">
           <h3>🛍️ Compras</h3>
           <button type="button" class="scnd-btn" onclick="closeModal('shoppingModal')"><i class="fa-solid fa-xmark"></i></button>

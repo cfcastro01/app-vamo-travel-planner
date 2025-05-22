@@ -163,24 +163,51 @@
   gap: 1rem;
 }
 
-/* ===== MODAIS DE DESPESAS ===== */
-/* .expense-modal {
-  background: white;
-  margin: 0;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: none;
-  border-radius: 6px;
-  padding: 0;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  overflow-y: auto;
-} */
+/* ===== CARDS DE DESPESAS ===== */
+.expense-card {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
+.expense-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.expense-card__type {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.expense-card__content p {
+  margin: 0.25rem 0;
+  color: var(--text-muted);
+}
+
+.expense-card__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.expense-card__actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+/* Adaptação para hospedagem */
+[data-type="lodging"] .expense-card__type {
+  color: #4CAF50; /* Cor específica para hospedagem */
+}
+
+/* ===== MODAIS DE DESPESAS ===== */
 .expense-modal {
   background: white;
   margin: auto; /* Centralização horizontal nativa do dialog */
@@ -282,7 +309,6 @@
   color: white;
   border: none;
 }
-
 
 /* ===== MOBILE ===== */
 /* ===== MOBILE ===== */

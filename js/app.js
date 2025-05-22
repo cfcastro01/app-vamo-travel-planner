@@ -10,9 +10,6 @@ let currentTrip = JSON.parse(localStorage.getItem('currentTrip')) || [];
 
 let sortableInstance = null;
 
-
-
-
 // ========== FUNÇÕES DE VALIDAÇÃO ========== //
 function validateCreateButton() {
   const dateInput = document.getElementById('startDate');
@@ -53,7 +50,7 @@ function getShortWeekday(date) {
 
 // ========== FUNÇÕES PRINCIPAIS ========== //
 
-// ===== Cria/Atualiza a viagem ===== //
+// CRIAR/ATUALIZAR VIAGEM //
 function createTrip() {
     const btn = document.querySelector('.controls button');
     if (btn.disabled) return;
@@ -68,20 +65,26 @@ function createTrip() {
     // Limpa os eventos salvos para esta viagem
     localStorage.removeItem('currentTrip');
     
-    for (let i = 0; i < daysCount; i++) {
+for (let i = 0; i < daysCount; i++) {
         const date = new Date(startDate);
         date.setDate(date.getDate() + i);
         currentTrip.push({
-            date: formatDate(date),
-            weekday: getShortWeekday(date),
-            location: ''
+        date: formatDate(date),
+        weekday: getShortWeekday(date),
+        location: '',
+        expenses: { // 👈 Deve ter lodging como array
+            lodging: [],
+            transport: [],
+            food: [],
+            activity: [],
+            shopping: []
+        }
         });
     }
-    
     renderTrip();
 }
 
-// ===== Renderizar tabela ===== //
+// RENDERIZAR TABELA DE VIAGEM //
 function renderTrip() {
     const daysList = document.getElementById('daysList');
     daysList.innerHTML = '';
@@ -111,6 +114,12 @@ function renderTrip() {
 
             <!-- Detalhes Expandíveis -->
             <div class="details-row" id="details-${index}" style="display: none;">
+
+                <!-- Cards de Despesas -->
+                <div class="expense-cards">
+                    ${renderExpenseCards(day.expenses)}
+                </div>
+
                 <div class="expense-buttons">
                     <!-- Botões para Adicionar Despesas -->
                     <button class="expense-btn" onclick="openExpenseModal('lodging', ${index})">
@@ -143,21 +152,7 @@ function renderTrip() {
     initSortable();
 }
 
-// Função auxiliar para renderizar atrações
-// function renderAttractions(attractions, dayIndex) {
-//     return (attractions || []).map((attraction, attractionIndex) => `
-//         <div class="attraction-item">
-//             <input type="text" 
-//                    value="${attraction.name}" 
-//                    onchange="updateAttractionName(${dayIndex}, ${attractionIndex}, this.value)">
-//             <input type="number" 
-//                    value="${attraction.price}" 
-//                    onchange="updateAttractionPrice(${dayIndex}, ${attractionIndex}, this.value)">
-//         </div>
-//     `).join('');
-// }
-
-// Controle expandir/recolher
+// CONTROLE EXPANDIR/RECOLHER
 function toggleDetails(index) {
     const details = document.getElementById(`details-${index}`);
     const icon = details.previousElementSibling.querySelector('i');
@@ -168,10 +163,6 @@ function toggleDetails(index) {
         : 'fa-solid fa-chevron-up';
 }
 
-// Exemplo de função de atualização
-// function updateDeparture(index, value) {
-//     currentTrip[index].departure = value;
-// }
 
 // Atualiza localização
 function updateLocation(index, value) {
@@ -179,7 +170,7 @@ function updateLocation(index, value) {
     saveTrip();
 }
 
-// ===== Adiciona/Remove dias ====== //
+// ADICIONA/REMOVE DIAS //
 function addDay() {
     if (currentTrip.length === 0) return; // Prevenção contra array vazio
 
@@ -187,84 +178,35 @@ function addDay() {
     const lastDate = parseDate(lastDateStr);
     
     // Cria nova data SEM timezone (evita bugs de UTC)
-    const nextDate = new Date(lastDate);
+const nextDate = new Date(lastDate);
     nextDate.setDate(nextDate.getDate() + 1);
-    
+
     currentTrip.push({
-        date: formatDate(nextDate),
-        weekday: getShortWeekday(nextDate),
-        location: '',
-        lodgingPrice: '',
-        transportPrice: '',
-        foodPrice: '', 
-        attractions: []
-      });
+    date: formatDate(nextDate),
+    weekday: getShortWeekday(date),
+    location: '',
+    expenses: { // 👈 Nova estrutura
+        lodging: [], // Array para múltiplas hospedagens
+        transport: [],
+        food: [],
+        activity: [],
+        shopping: []
+    }
+    });
     renderTrip();
     saveTrip();
-}
+};
 
 function removeDay() {
     if (currentTrip.length > 1) {
         currentTrip.pop();
-        
-        // Remove também o último evento salvo se existir
-        // const savedEvents = JSON.parse(localStorage.getItem('currentTrip')) || [];
-        // if (savedEvents.length >= currentTrip.length) {
-        //     savedEvents.pop();
-        //     localStorage.setItem('currentTrip', JSON.stringify(savedEvents));
-        // }
         
         renderTrip();
         saveTrip();
     }
 }
 
-// Drag and Drop
-// function initSortable() {
-//     if (sortableInstance) sortableInstance.destroy();
-    
-//     sortableInstance = new Sortable(daysList, {
-//         handle: '.drag-handle',
-//         draggable: '.day-row',
-//         animation: 150,
-//         onEnd: (evt) => {
-//             const oldIndex = evt.oldIndex;
-//             const newIndex = evt.newIndex;
-
-//             // Troca APENAS os dados do evento entre os dias
-//             const tempLocation = currentTrip[oldIndex].location;
-//             const tempEventDetails = { 
-//                 departure: currentTrip[oldIndex].departure,
-//                 arrival: currentTrip[oldIndex].arrival,
-//                 lodging: currentTrip[oldIndex].lodging,
-//                 lodgingPrice: currentTrip[oldIndex].lodgingPrice,
-//                 attractions: currentTrip[oldIndex].attractions,
-//                 notes: currentTrip[oldIndex].notes
-//             };
-
-//             // Mantém as datas originais, só troca os dados do evento
-//             currentTrip[oldIndex].location = currentTrip[newIndex].location;
-//             currentTrip[oldIndex].departure = currentTrip[newIndex].departure;
-//             currentTrip[oldIndex].arrival = currentTrip[newIndex].arrival;
-//             currentTrip[oldIndex].lodging = currentTrip[newIndex].lodging;
-//             currentTrip[oldIndex].lodgingPrice = currentTrip[newIndex].lodgingPrice;
-//             currentTrip[oldIndex].attractions = currentTrip[newIndex].attractions;
-//             currentTrip[oldIndex].notes = currentTrip[newIndex].notes;
-
-//             currentTrip[newIndex].location = tempLocation;
-//             currentTrip[newIndex].departure = tempEventDetails.departure;
-//             currentTrip[newIndex].arrival = tempEventDetails.arrival;
-//             currentTrip[newIndex].lodging = tempEventDetails.lodging;
-//             currentTrip[newIndex].lodgingPrice = tempEventDetails.lodgingPrice;
-//             currentTrip[newIndex].attractions = tempEventDetails.attractions;
-//             currentTrip[newIndex].notes = tempEventDetails.notes;
-            
-//             renderTrip();
-//             saveTrip();
-//         }
-//     });
-// }
-
+// DRAG AND DROP //
 function initSortable() {
     if (sortableInstance) sortableInstance.destroy();
     
@@ -276,43 +218,39 @@ function initSortable() {
             const oldIndex = evt.oldIndex;
             const newIndex = evt.newIndex;
 
-            // Troca APENAS os dados do evento (mantém datas originais)
+            // Guarda as datas originais (não devem ser alteradas)
+            const oldDate = currentTrip[oldIndex].date;
+            const oldWeekday = currentTrip[oldIndex].weekday;
+            const newDate = currentTrip[newIndex].date;
+            const newWeekday = currentTrip[newIndex].weekday;
+
+            // Troca TODOS os dados relacionados ao evento/local
             const tempEventData = { 
-                location: currentTrip[oldIndex].location,
-                departure: currentTrip[oldIndex].departure,
-                arrival: currentTrip[oldIndex].arrival,
-                lodging: currentTrip[oldIndex].lodging,
-                lodgingPrice: currentTrip[oldIndex].lodgingPrice,
-                attractions: currentTrip[oldIndex].attractions,
-                notes: currentTrip[oldIndex].notes
+                location: currentTrip[oldIndex].location, // inclui a localização
+                expenses: currentTrip[oldIndex].expenses // inclui as despesas
             };
 
             // Move os dados do novo índice para o antigo
             currentTrip[oldIndex].location = currentTrip[newIndex].location;
-            currentTrip[oldIndex].departure = currentTrip[newIndex].departure;
-            currentTrip[oldIndex].arrival = currentTrip[newIndex].arrival;
-            currentTrip[oldIndex].lodging = currentTrip[newIndex].lodging;
-            currentTrip[oldIndex].lodgingPrice = currentTrip[newIndex].lodgingPrice;
-            currentTrip[oldIndex].attractions = currentTrip[newIndex].attractions;
-            currentTrip[oldIndex].notes = currentTrip[newIndex].notes;
+            currentTrip[oldIndex].expenses = currentTrip[newIndex].expenses;
 
             // Coloca os dados temporários no novo índice
             currentTrip[newIndex].location = tempEventData.location;
-            currentTrip[newIndex].departure = tempEventData.departure;
-            currentTrip[newIndex].arrival = tempEventData.arrival;
-            currentTrip[newIndex].lodging = tempEventData.lodging;
-            currentTrip[newIndex].lodgingPrice = tempEventData.lodgingPrice;
-            currentTrip[newIndex].attractions = tempEventData.attractions;
-            currentTrip[newIndex].notes = tempEventData.notes;
+            currentTrip[newIndex].expenses = tempEventData.expenses;
 
-            saveTrip(); 
-            renderTrip(); 
+            // Restaura as datas originais nos índices
+            currentTrip[oldIndex].date = oldDate;
+            currentTrip[oldIndex].weekday = oldWeekday;
+            currentTrip[newIndex].date = newDate;
+            currentTrip[newIndex].weekday = newWeekday;
+
+            saveTrip();
+            renderTrip();
         }
     });
 }
 
-// ====== SALVAR VIAGEM ====== //
-
+// SALVAR VIAGEM //
 let saveTimeout;
 // Salvamento automático
 function saveTrip() {
@@ -327,11 +265,11 @@ function saveTrip() {
 function manualSaveTrip() {
   clearTimeout(saveTimeout); // Cancela o debounce pendente
   localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
-  alert('Viagem salva! ✅'); // Feedback diferente
+  alert('Viagem salva! ✅');
 }
 
 
-// ======== ABRIR MODAL DE DESPESA ======== //
+// ABRIR MODAL DE DESPESA //
 // Variáveis globais para controle
 let currentExpenseType = ''; // Guarda o tipo de despesa selecionado (ex: 'hospedagem')
 let currentExpenseDayIndex = null; // Guarda o índice/dia da viagem selecionado
@@ -367,12 +305,125 @@ function closeModal(modalId) {
     }
   }
   
-  // Fechar modal ao clicar fora
+// Fechar modal ao clicar fora
   document.querySelectorAll('.expense-modal').forEach(modal => {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal(modal.id);
     });
   });
+
+// MAPEAMENTO DE CAMPOS POR TIPO //
+const fieldConfig = {
+  lodging: {
+    fields: ['Type', 'Value', 'CheckIn', 'CheckOut', 'Name', 'Address', 'Link']
+  },
+  transport: {
+    fields: ['Type', 'Value', 'Departure', 'Arrival', 'Time']
+  },
+  food: {
+    fields: ['Value', 'Name']
+  },
+  activity: {
+    fields: ['Type', 'Value', 'Name', 'Address', 'Date', 'Time']
+  },
+  shopping: {
+    fields: ['Store', 'Value', 'Address', 'Items']
+  }
+};
+
+// SALVAR DESPESA (HOSPEDAGEM) //
+function saveExpense() {
+  const type = currentExpenseType;
+  const dayIndex = currentExpenseDayIndex;
+  
+  // Obter configuração dos campos
+  const config = fieldConfig[type];
+  const expenseData = { id: Date.now() };
+
+  // Coletar dados dinamicamente
+  config.fields.forEach(field => {
+    const fieldId = `${type}${field}`; // Ex: lodgingType
+    const element = document.getElementById(fieldId);
+    
+    if (element) {
+      let value = element.value;
+      // Converter números
+      if (fieldId.includes('Value')) value = parseFloat(value);
+      expenseData[field.toLowerCase()] = value;
+    }
+  });
+
+  // Salvar no currentTrip
+  currentTrip[dayIndex].expenses[type].push(expenseData);
+  
+  closeModal(`${type}Modal`);
+  saveTrip();
+  renderTrip();
+}
+
+// RENDERIZAR CARDS (ATUALIZADA) //
+function renderExpenseCards(expenses) {
+  return Object.keys(expenses).map(type => 
+    expenses[type].map((expense, index) => `
+      <div class="expense-card" data-type="${type}">
+        <h4>${type.toUpperCase()}</h4>
+        ${type === 'lodging' ? `
+          <p>${expense.name} (${expense.type})</p>
+          <p>Check-in: ${expense.checkin}</p>
+        ` : ''}
+        ${type === 'transport' ? `
+          <p>${expense.type} - Partida: ${expense.departure}</p>
+        ` : ''}
+        <p>Valor: R$ ${expense.value.toFixed(2)}</p>
+      </div>
+    `).join('')
+  ).join('');
+}
+
+// EDITAR DESPESA //
+function editExpense(type, expenseIndex) {
+  const expense = currentTrip[currentExpenseDayIndex].expenses[type][expenseIndex];
+  
+  // Preenche o modal
+  const modal = document.getElementById(`${type}Modal`);
+  modal.querySelector('#descricao').value = expense.description;
+  modal.querySelector('#custo').value = expense.cost;
+  
+  // Abre o modal em modo edição
+  currentExpenseType = type;
+  modal.showModal();
+  
+  // Substitui o evento de salvamento
+  modal.querySelector('form').onsubmit = (e) => {
+    e.preventDefault();
+    updateExpense(expenseIndex);
+  };
+}
+
+// ATUALIZAR DESPESA //
+function updateExpense(expenseIndex) {
+  const modal = document.getElementById(`${currentExpenseType}Modal`);
+  const description = modal.querySelector('#descricao').value;
+  const cost = parseFloat(modal.querySelector('#custo').value);
+
+  currentTrip[currentExpenseDayIndex].expenses[currentExpenseType][expenseIndex] = {
+    id: Date.now(),
+    description,
+    cost,
+    type: currentExpenseType
+  };
+  
+  saveTrip();
+  closeModal(`${currentExpenseType}Modal`);
+  renderTrip();
+}
+
+// EXCLUIR DESPESA //
+function deleteExpense(type, expenseIndex) {
+  currentTrip[currentExpenseDayIndex].expenses[type].splice(expenseIndex, 1);
+  saveTrip();
+  renderTrip();
+}
 
 
 // ========== INICIALIZAÇÃO ========== //
@@ -386,13 +437,13 @@ window.onload = () => {
         startDateInput.addEventListener('input', validateCreateButton);
     }
     
-    // Carrega viagem salva (se existir)
+    // Carrega viagem salva ou inicializa array
     const savedTrip = localStorage.getItem('savedTrip');
-    if (savedTrip) {
-        currentTrip = JSON.parse(savedTrip);
-        renderTrip();
-    }
+    currentTrip = savedTrip ? JSON.parse(savedTrip) : [];
+    
+    if (currentTrip.length > 0) renderTrip(); // Renderiza só se houver dados
 };
+
 
 // Limpar o localStorage e apagar infos de viagem
 // Manter a linha abaixo comentada para salvar infos
