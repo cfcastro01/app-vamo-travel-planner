@@ -1,12 +1,4 @@
-let currentTrip = JSON.parse(localStorage.getItem('currentTrip')) || [];
-// outra forma de escrever usando if else
-// let currentTrip;
-// const storedTrip = localStorage.getItem('currentTrip');
-// if (storedTrip) {
-//   currentTrip = JSON.parse(storedTrip);
-// } else {
-//   currentTrip = [];
-// }
+let currentTrip = [];
 
 let sortableInstance = null;
 
@@ -141,7 +133,7 @@ function renderTrip() {
 
                 <!-- Cards de Despesas -->
                 <div class="expense-cards">
-                    ${renderExpenseCards(day.expenses)}
+                    ${renderExpenseCards(day.expenses, index)}
                 </div>
             </div>
         `;
@@ -254,11 +246,11 @@ function initSortable() {
 let saveTimeout;
 // Salvamento automático
 function saveTrip() {
-  clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(() => {
-    localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
-    console.log('Salvando...'); // Remova o alerta
-  }, 500); // Salva após 0.5s da última alteração
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
+        console.log('Auto-salvo!');
+    }, 500);
 }
 
 // Salvamento manual (instantâneo)
@@ -333,36 +325,38 @@ const fieldConfig = {
 
 // SALVAR DESPESA (HOSPEDAGEM) //
 function saveExpense() {
-  const type = currentExpenseType;
-  const dayIndex = currentExpenseDayIndex;
-  
-  // Obter configuração dos campos
-  const config = fieldConfig[type];
-  const expenseData = { id: Date.now() };
+    const type = currentExpenseType;
+    const dayIndex = currentExpenseDayIndex;
 
-  // Coletar dados dinamicamente
-  config.fields.forEach(field => {
-    const fieldId = `${type}${field}`; // Ex: lodgingType
-    const element = document.getElementById(fieldId);
-    
-    if (element) {
-      let value = element.value;
-      // Converter números
-      if (fieldId.includes('Value')) value = parseFloat(value);
-      expenseData[field.toLowerCase()] = value;
+    // Coleta dados MANUALMENTE (evitando complexidade)
+    const expenseData = {
+        id: Date.now(),
+        type: document.getElementById(`${type}Type`).value,
+        value: parseFloat(document.getElementById(`${type}Value`).value),
+        checkIn: document.getElementById(`${type}CheckIn`)?.value || '',
+        checkOut: document.getElementById(`${type}CheckOut`)?.value || '',
+        name: document.getElementById(`${type}Name`)?.value || '',
+        address: document.getElementById(`${type}Address`)?.value || '',
+        link: document.getElementById(`${type}Link`)?.value || ''
+    };
+
+    // Se estiver editando
+    if (currentExpenseIndex !== null) {
+        currentTrip[dayIndex].expenses[type][currentExpenseIndex] = expenseData;
+        currentExpenseIndex = null; // 👈 Reseta após salvar
+    } 
+    // Se for nova despesa
+    else {
+        currentTrip[dayIndex].expenses[type].push(expenseData);
     }
-  });
 
-  // Salvar no currentTrip
-  currentTrip[dayIndex].expenses[type].push(expenseData);
-  
-  closeModal(`${type}Modal`);
-  saveTrip();
-  renderTrip();
+    closeModal(`${type}Modal`);
+    saveTrip(); // Dispara autosave
+    renderTrip(); // Atualiza a interface
 }
 
 // RENDERIZAR CARDS DE DESPESA //
-function renderExpenseCards(expenses) {
+function renderExpenseCards(expenses, dayIndex) {
     // Mapeamento dos tipos para português
   const typeNames = {
     lodging: 'HOSPEDAGEM',
@@ -373,15 +367,15 @@ function renderExpenseCards(expenses) {
   };
 
 return Object.keys(expenses).map(type => 
-    expenses[type].map((expense, index) => `
+    expenses[type].map((expense, expenseIndex) => `
       <div class="expense-card" data-type="${type}">
         <div class="card-header">
           <h4>${typeNames[type]}</h4>
           <div class="card-actions">
-            <button onclick="editExpense('${type}', ${index})">
+            <button onclick="editExpense(${dayIndex}, '${type}', ${expenseIndex})">
               <i class="fa-solid fa-pen"></i>
             </button>
-            <button onclick="deleteExpense('${type}', ${index})">
+            <button onclick="deleteExpense(${dayIndex}, '${type}', ${expenseIndex})">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -403,67 +397,35 @@ return Object.keys(expenses).map(type =>
 
 
 // EDITAR DESPESA //
-function editExpense(type, expenseIndex) {
-  const expense = currentTrip[currentExpenseDayIndex].expenses[type][expenseIndex];
-  const modal = document.getElementById(`${type}Modal`);
+// variável global //
+let currentExpenseIndex = null; // Variável global para controle
 
-  // Preenche todos os campos do modal baseado no tipo
-  if (type === 'lodging') {
-    modal.querySelector('#lodgingType').value = expense.type;
-    modal.querySelector('#lodgingValue').value = expense.value;
-    modal.querySelector('#lodgingCheckIn').value = expense.checkIn;
-    modal.querySelector('#lodgingCheckOut').value = expense.checkOut;
-    modal.querySelector('#lodgingName').value = expense.name;
-    modal.querySelector('#lodgingAddress').value = expense.address;
-    modal.querySelector('#lodgingLink').value = expense.link;
-  }
-  else if (type === 'transport') {
-    modal.querySelector('#transportType').value = expense.type;
-    modal.querySelector('#transportValue').value = expense.value;
-    modal.querySelector('#transportDeparture').value = expense.departure;
-    modal.querySelector('#transportArrival').value = expense.arrival;
-    modal.querySelector('#transportTime').value = expense.time;
-  }
+function editExpense(dayIndex, type, expenseIndex) {
+    currentExpenseDayIndex = dayIndex; // Define o dia atual
+    currentExpenseType = type; // Define o tipo de despesa
+    currentExpenseIndex = expenseIndex; // Define o índice da despesa sendo editada
 
-  modal.showModal();
-  
-  // Atualiza o evento de submit para edição
-  modal.querySelector('form').onsubmit = (e) => {
-    e.preventDefault();
-    updateExpense(expenseIndex);
-  };
-}
+    const expense = currentTrip[dayIndex].expenses[type][expenseIndex];
+    const modal = document.getElementById(`${type}Modal`);
 
-// ATUALIZAR DESPESA //
-function updateExpense(expenseIndex) {
-  const type = currentExpenseType;
-  const modal = document.getElementById(`${type}Modal`);
-  const dayIndex = currentExpenseDayIndex;
+    // Preenchimento MANUAL (simples e seguro)
+    if (type === 'lodging') {
+        modal.querySelector('#lodgingType').value = expense.type;
+        modal.querySelector('#lodgingValue').value = expense.value;
+        modal.querySelector('#lodgingCheckIn').value = expense.checkIn;
+        modal.querySelector('#lodgingCheckOut').value = expense.checkOut;
+        modal.querySelector('#lodgingName').value = expense.name;
+        modal.querySelector('#lodgingAddress').value = expense.address;
+        modal.querySelector('#lodgingLink').value = expense.link;
+    }
 
-  // Coleta os dados atualizados
-  const updatedData = {};
-  if (type === 'lodging') {
-    updatedData.type = modal.querySelector('#lodgingType').value;
-    updatedData.value = parseFloat(modal.querySelector('#lodgingValue').value);
-    updatedData.checkIn = modal.querySelector('#lodgingCheckIn').value;
-    // ... colete todos os campos
-  }
-  // Repita para outros tipos...
-
-  // Atualiza os dados
-  currentTrip[dayIndex].expenses[type][expenseIndex] = {
-    ...currentTrip[dayIndex].expenses[type][expenseIndex],
-    ...updatedData
-  };
-
-  saveTrip();
-  closeModal(`${type}Modal`);
-  renderTrip();
+    modal.showModal();
+    modal.classList.add('active');
 }
 
 // EXCLUIR DESPESA //
-function deleteExpense(type, expenseIndex) {
-  currentTrip[currentExpenseDayIndex].expenses[type].splice(expenseIndex, 1);
+function deleteExpense(dayIndex, type, expenseIndex) {
+    currentTrip[dayIndex].expenses[type].splice(expenseIndex, 1);
   saveTrip();
   renderTrip();
 }
@@ -475,16 +437,17 @@ window.onload = () => {
     validateCreateButton();
     
     // Listener para validação em tempo real
-    const startDateInput = document.getElementById('startDate');
+    const startDateInput = document.getElementById('startDate'); // 👈 Definir a variável
     if (startDateInput) {
         startDateInput.addEventListener('input', validateCreateButton);
     }
     
-    // Carrega viagem salva ou inicializa array
+    // Carrega viagem salva (se existir)
     const savedTrip = localStorage.getItem('savedTrip');
-    currentTrip = savedTrip ? JSON.parse(savedTrip) : [];
-    
-    if (currentTrip.length > 0) renderTrip(); // Renderiza só se houver dados
+    if (savedTrip) {
+        currentTrip = JSON.parse(savedTrip);
+        renderTrip();
+    }
 };
 
 
