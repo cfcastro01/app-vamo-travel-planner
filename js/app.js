@@ -325,48 +325,61 @@ const fieldConfig = {
 
 // SALVAR DESPESA (HOSPEDAGEM) //
 function saveExpense() {
-    const type = currentExpenseType;
-    const dayIndex = currentExpenseDayIndex;
+  const type = currentExpenseType;
+  const dayIndex = currentExpenseDayIndex;
+  const modal = document.getElementById(`${type}Modal`);
 
-    // Coleta dados MANUALMENTE (evitando complexidade)
-    const expenseData = {
-        id: Date.now(),
-        type: document.getElementById(`${type}Type`).value,
-        value: parseFloat(document.getElementById(`${type}Value`).value),
-        checkIn: document.getElementById(`${type}CheckIn`)?.value || '',
-        checkOut: document.getElementById(`${type}CheckOut`)?.value || '',
-        name: document.getElementById(`${type}Name`)?.value || '',
-        address: document.getElementById(`${type}Address`)?.value || '',
-        link: document.getElementById(`${type}Link`)?.value || ''
-    };
+  // coleta todos os campos, usando optional chaining para não quebrar
+  const expenseData = {
+    id: Date.now(),
+    // pega o campo "Type" (se existir)
+    type:    document.getElementById(`${type}Type`)?.value || '',
+    // valor sempre tenta converter para número
+    value:   parseFloat(document.getElementById(`${type}Value`)?.value) || 0,
+    // campos específicos de hospedagem
+    checkIn:  document.getElementById(`${type}CheckIn`)?.value || '',
+    checkOut: document.getElementById(`${type}CheckOut`)?.value || '',
+    // nome genérico (hospedagem, alimentação, compras etc)
+    name:    document.getElementById(`${type}Name`)?.value || '',
+    // para compras: loja
+    store:   document.getElementById(`${type}Store`)?.value || '',
+    // para transporte: usa o Arrival como destino
+    departure:   document.getElementById(`${type}Departure`)?.value || '',
+    destination: document.getElementById(`${type}Arrival`)?.value   || '',
+    time:        document.getElementById(`${type}Time`)?.value      || '',
+    // endereço e link (se existirem)
+    address: document.getElementById(`${type}Address`)?.value || '',
+    link:    document.getElementById(`${type}Link`)?.value    || '',
+    // itens (para compras)
+    items:   document.getElementById(`${type}Items`)?.value  || ''
+  };
 
-    // Se estiver editando
-    if (currentExpenseIndex !== null) {
-        currentTrip[dayIndex].expenses[type][currentExpenseIndex] = expenseData;
-        currentExpenseIndex = null; // 👈 Reseta após salvar
-    } 
-    // Se for nova despesa
-    else {
-        currentTrip[dayIndex].expenses[type].push(expenseData);
-    }
+  // Se estiver editando
+  if (currentExpenseIndex !== null) {
+    currentTrip[dayIndex].expenses[type][currentExpenseIndex] = expenseData;
+    currentExpenseIndex = null;
+  }
+  else {
+    currentTrip[dayIndex].expenses[type].push(expenseData);
+  }
 
-    closeModal(`${type}Modal`);
-    saveTrip(); // Dispara autosave
-    renderTrip(); // Atualiza a interface
+  closeModal(`${type}Modal`);
+  saveTrip();
+  renderTrip();
 }
+
 
 // RENDERIZAR CARDS DE DESPESA //
 function renderExpenseCards(expenses, dayIndex) {
-    // Mapeamento dos tipos para português
   const typeNames = {
-    lodging: 'HOSPEDAGEM',
+    lodging:   'HOSPEDAGEM',
     transport: 'TRANSPORTE',
-    food: 'ALIMENTAÇÃO',
-    activity: 'ATIVIDADE',
-    shopping: 'COMPRAS'
+    food:      'ALIMENTAÇÃO',
+    activity:  'ATIVIDADE',
+    shopping:  'COMPRAS'
   };
 
-return Object.keys(expenses).map(type => 
+  return Object.keys(expenses).map(type =>
     expenses[type].map((expense, expenseIndex) => `
       <div class="expense-card" data-type="${type}">
         <div class="card-header">
@@ -380,20 +393,38 @@ return Object.keys(expenses).map(type =>
             </button>
           </div>
         </div>
+
         ${type === 'lodging' ? `
           <p>${expense.name} (${expense.type})</p>
           <p>Check-in: ${expense.checkIn} | Check-out: ${expense.checkOut}</p>
           ${expense.link ? `<p><a href="${expense.link}" target="_blank">🔗 Link</a></p>` : ''}
         ` : ''}
+
         ${type === 'transport' ? `
-          <p>${expense.type} - ${expense.departure} → ${expense.destination}</p>
+          <p>${expense.type} – ${expense.departure} → ${expense.destination}</p>
           <p>Duração: ${expense.time}</p>
         ` : ''}
+
+        ${type === 'food' ? `
+          <p>${expense.name}</p>
+        ` : ''}
+
+        ${type === 'activity' ? `
+          <p>${expense.type} – ${expense.name}</p>
+          <p>${expense.time}</p>
+        ` : ''}
+
+        ${type === 'shopping' ? `
+          <p>Loja: ${expense.store}</p>
+          ${expense.items ? `<p>Itens: ${expense.items}</p>` : ''}
+        ` : ''}
+
         <p class="expense-value">R$ ${expense.value.toFixed(2)}</p>
       </div>
     `).join('')
   ).join('');
 }
+
 
 
 // EDITAR DESPESA //
