@@ -175,7 +175,7 @@ const nextDate = new Date(lastDate);
 
     currentTrip.push({
     date: formatDate(nextDate),
-    weekday: getShortWeekday(date),
+    weekday: getShortWeekday(nextDate),
     location: '',
     expenses: { // 👈 Nova estrutura
         lodging: [], // Array para múltiplas hospedagens
