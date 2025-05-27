@@ -31,24 +31,27 @@
                 Dias de viagem
                 <input type="number" id="daysCount" min="1" value="7" required>
             </label>
+            <label>
+                Título da viagem
+                <input type="text" id="tripTitle" placeholder="Minha viagem" required>
+            </label>
             <button id="createTripBtn" onclick="createTrip()">Criar Viagem</button>
         </div>
         
-
+        <!-- Título da Tabela -->
+        <div class="header-row">
+            <span id="tripTitleDisplay">
+                <button onclick="editTripTitle()">✏️</button>
+            </span>
+            <span id="tripTotalDisplay"></span>
+        </div>
         <!-- Tabela de Dias -->
         <div class="trip-table">
-            <div class="header-row">
-                <div class="date-day">
-                  <span class="date">Data</span>
-                  <span class="day">Dia</span>
-                </div>
-                <span class="event">Evento/Local</span>
-            </div>
             <div id="daysList"></div>
         </div>
 
         <!-- Botões -->
-        <div class="controls">
+        <div class="btn-controls">
             <button onclick="addDay()">+ Dia</button>
             <button onclick="removeDay()">- Dia</button>
             <button onclick="manualSaveTrip()">Salvar Viagem</button>

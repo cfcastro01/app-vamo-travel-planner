@@ -28,33 +28,29 @@
 
 .controls {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 160px 160px 1fr 160px;
   align-items: flex-end;
   gap: 16px;
   margin-bottom: 24px;
 }
 
 /* TABELA DA VIAGEM */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #ddd;
+  font-weight: bold;
+  border-radius: 4px 4px 0 0;
+}
+
 .trip-table {
   background: white;
-  border-radius: 4px;
+  border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   overflow: hidden;
-  margin: 24px 0;
-}
-
-.header-row {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  padding: 16px;
-  background: #ecf0f1;
-  font-weight: bold;
-  align-items: center;
-  justify-content: center;
-}
-
-.header-row span {
-  width: 80px;
+  margin-bottom: 24px;
 }
 
 .date-day {
@@ -80,20 +76,16 @@
   background: #f8f9fa;
 }
 
-
-/* Apenas a área do evento é arrastável */
-.event-container {
-  cursor: move;
-}
-
 .day {
   text-transform: capitalize;
 }
 
+/* Apenas a área do evento é arrastável */
 .event-container {
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: move;
 }
 
 .event-container input {
@@ -160,6 +152,12 @@
 .modal-grid {
   display: grid;
   gap: 1rem;
+}
+
+.btn-controls {
+display: grid; 
+grid-template-columns: 1fr 1fr 1fr;
+gap: 16px;
 }
 
 /* ===== CARDS DE DESPESAS ===== */
@@ -313,7 +311,7 @@
 /* ===== MOBILE ===== */
 /* ===== MOBILE ===== */
 @media (max-width: 500px) {
-   /* ===== CONTROLES GERAIS ===== */
+  /* CONTROLES GERAIS */
    .controls {
     display: flex;
     flex-direction: column;
@@ -346,11 +344,12 @@
     font-size: 1.2rem;
   }
 
-  /* ===== ESTRUTURA DA TABELA ===== */
+  /* ESTRUTURA DA TABELA */
   .trip-table {
     padding: 16px;
   }
-  .header-row{
+
+  .header-row span:not(#tripTitleDisplay):not(#tripTotalDisplay) {
     display: none;
   }
 
@@ -364,7 +363,7 @@
     border-bottom: none;
   }
 
-  /* ===== CABEÇALHO DO DIA ===== */
+  /* CABEÇALHO DO DIA */
   .day-header {
     display: flex;
     flex-direction: column;
@@ -373,7 +372,7 @@
     width: 100%;
   }
 
-  /* ===== CÉLULAS DA TABELA ===== */
+  /* CÉLULAS DA TABELA */
   .date-day {
     display: flex;
     gap: 16px;
@@ -385,7 +384,7 @@
     width: 95px;
   }
 
-  /* ===== CONTAINER DE EVENTOS ===== */
+  /* CONTAINER DE EVENTOS */
    .event-container {
     width: 100%;
     margin-top: 8px;
@@ -399,7 +398,7 @@
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
   }
   
-  /* ===== BOTÕES ===== */
+  /* BOTÕES */
   .drag-handle {
     width: 30px;
     height: 42px;
@@ -425,7 +424,7 @@
     transition: all 0.3s;
   }
 
-  /* ===== DETALHES EXPANDÍVEIS ===== */
+  /* DETALHES EXPANDÍVEIS */
   .details-row {
     width: 100%;
     margin-top: 8px;
@@ -446,12 +445,6 @@
     display: none;
   }
 
-  /* Ajustes específicos para os grids internos */
-  /* .modal-grid > div {
-    grid-template-columns: 1fr !important;
-    gap: 24px;
-  } */
-
   /*  MODAL DE DESPESA */  
   .modal-content {
     padding: 16px;
@@ -468,6 +461,12 @@
 
   .row-even, .row-odd, .row-three {
     grid-template-columns: 1fr;
+  }
+
+  /*  BOTÕES DE CONTROLE */ 
+  .btn-controls {
+  display: flex; 
+  flex-direction: column;
   }
 }
 

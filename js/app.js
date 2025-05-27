@@ -1,5 +1,5 @@
 let currentTrip = [];
-
+let tripTitle = '';
 let sortableInstance = null;
 
 // ========== FUNÇÕES DE VALIDAÇÃO ========== //
@@ -52,6 +52,7 @@ function createTrip() {
     const startDate = new Date(year, month - 1, day);
     
     const daysCount = parseInt(document.getElementById('daysCount').value);
+    tripTitle = document.getElementById('tripTitle').value;
     currentTrip = [];
     
     // Limpa os eventos salvos para esta viagem
@@ -64,7 +65,7 @@ for (let i = 0; i < daysCount; i++) {
         date: formatDate(date),
         weekday: getShortWeekday(date),
         location: '',
-        expenses: { // 👈 Deve ter lodging como array
+        expenses: {
             lodging: [],
             transport: [],
             food: [],
@@ -74,12 +75,18 @@ for (let i = 0; i < daysCount; i++) {
         });
     }
     renderTrip();
+    manualSaveTrip();
 }
 
 // RENDERIZAR TABELA DE VIAGEM //
 function renderTrip() {
     const daysList = document.getElementById('daysList');
     daysList.innerHTML = '';
+
+    // Atualiza título e valor total
+    document.getElementById('tripTitleDisplay').textContent = tripTitle;
+    document.getElementById('tripTotalDisplay').textContent = 
+        `Total: R$ ${calculateTotalExpenses().toFixed(2)}`;
     
     currentTrip.forEach((day, index) => {
         const row = document.createElement('div');
@@ -248,15 +255,21 @@ let saveTimeout;
 function saveTrip() {
     clearTimeout(saveTimeout);
     saveTimeout = setTimeout(() => {
-        localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
+        localStorage.setItem('savedTrip', JSON.stringify({
+            title: tripTitle,
+            days: currentTrip
+        }));
         console.log('Auto-salvo!');
     }, 500);
-}
+  }
 
 // Salvamento manual (instantâneo)
 function manualSaveTrip() {
   clearTimeout(saveTimeout); // Cancela o debounce pendente
-  localStorage.setItem('savedTrip', JSON.stringify(currentTrip));
+    localStorage.setItem('savedTrip', JSON.stringify({
+        title: tripTitle,
+        days: currentTrip
+    }));
   alert('Viagem salva! ✅');
 }
 
@@ -425,8 +438,6 @@ function renderExpenseCards(expenses, dayIndex) {
   ).join('');
 }
 
-
-
 // EDITAR DESPESA //
 // variável global //
 let currentExpenseIndex = null; // Variável global para controle
@@ -461,6 +472,36 @@ function deleteExpense(dayIndex, type, expenseIndex) {
   renderTrip();
 }
 
+// EDITAR TÍTULO DA VIAGEM //
+function editTripTitle() {
+    const container = document.getElementById('tripTitleDisplay');
+    container.innerHTML = `
+        <input id="editTitleInput" value="${tripTitle}">
+        <button onclick="saveEditedTitle()">💾</button>
+    `;
+}
+
+function saveEditedTitle() {
+    const input = document.getElementById('editTitleInput');
+    tripTitle = input.value;
+    renderTrip();
+    manualSaveTrip();
+}
+
+// CALCULAR TOTAL DE DESPESAS //
+function calculateTotalExpenses() {
+    let total = 0;
+    currentTrip.forEach(day => {
+        Object.values(day.expenses).forEach(expenseList => {
+            expenseList.forEach(exp => {
+                total += exp.value || 0;
+            });
+        });
+    });
+    return total;
+}
+
+
 
 // ========== INICIALIZAÇÃO ========== //
 window.onload = () => {
@@ -473,13 +514,15 @@ window.onload = () => {
         startDateInput.addEventListener('input', validateCreateButton);
     }
     
-    // Carrega viagem salva (se existir)
+  // Carrega viagem salva (se existir)
     const savedTrip = localStorage.getItem('savedTrip');
     if (savedTrip) {
-        currentTrip = JSON.parse(savedTrip);
+        const parsed = JSON.parse(savedTrip);
+        tripTitle = parsed.title || 'Minha Viagem';
+        currentTrip = parsed.days || [];
         renderTrip();
     }
-};
+  };
 
 
 // Limpar o localStorage e apagar infos de viagem
