@@ -35,7 +35,7 @@
 }
 
 /* TABELA DA VIAGEM */
-.header-row {
+.trip-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,6 +43,27 @@
   background: #ddd;
   font-weight: bold;
   border-radius: 4px 4px 0 0;
+}
+
+#tripTitleDisplay {
+  display: flex;
+  gap: 8px;
+}
+
+.trip-title-btn {
+  background: none;
+  color: #555;
+}
+
+.trip-title-btn:hover {
+  background: none !important;
+  color: #333;
+}
+
+#editTitleInput {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box
 }
 
 .trip-table {
@@ -345,14 +366,31 @@ gap: 16px;
   }
 
   /* ESTRUTURA DA TABELA */
+
+  .trip-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  #tripTitleDisplay {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+  #tripTotalDisplay,
+  #editTitleInput  {
+    width: 100%;
+  }
+
+  #tripTitleDisplay button {
+    width: 48px;
+  }
+
   .trip-table {
     padding: 16px;
   }
-
-  .header-row span:not(#tripTitleDisplay):not(#tripTotalDisplay) {
-    display: none;
-  }
-
   .day-row {
     display: flex;
     flex-wrap: wrap;

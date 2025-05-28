@@ -80,13 +80,20 @@ for (let i = 0; i < daysCount; i++) {
 
 // RENDERIZAR TABELA DE VIAGEM //
 function renderTrip() {
-    const daysList = document.getElementById('daysList');
+  const daysList = document.getElementById('daysList');
     daysList.innerHTML = '';
 
-    // Atualiza título e valor total
-    document.getElementById('tripTitleDisplay').textContent = tripTitle;
-    document.getElementById('tripTotalDisplay').textContent = 
-        `Total: R$ ${calculateTotalExpenses().toFixed(2)}`;
+    // Atualiza título
+    const titleTextSpan = document.querySelector('#tripTitleDisplay .trip-title-text');
+    if (titleTextSpan) {
+        titleTextSpan.textContent = tripTitle;
+}
+
+    // Atualiza valor total
+    const totalSpan = document.getElementById('tripTotalDisplay');
+    if (totalSpan) {
+        totalSpan.textContent = `Total: R$ ${calculateTotalExpenses().toFixed(2)}`;
+    }
     
     currentTrip.forEach((day, index) => {
         const row = document.createElement('div');
@@ -144,11 +151,19 @@ function renderTrip() {
                 </div>
             </div>
         `;
-        
         daysList.appendChild(row);
     });
 
     initSortable();
+
+    const titleContainer = document.getElementById('tripTitleDisplay');
+      if (titleContainer) {
+      titleContainer.innerHTML = `
+        <span class="trip-title-text">${tripTitle}</span>
+        <button class="trip-title-btn" onclick="editTripTitle()">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+    `;}
 }
 
 // CONTROLE EXPANDIR/RECOLHER
@@ -477,15 +492,34 @@ function editTripTitle() {
     const container = document.getElementById('tripTitleDisplay');
     container.innerHTML = `
         <input id="editTitleInput" value="${tripTitle}">
-        <button onclick="saveEditedTitle()">💾</button>
+        <button onclick="saveEditedTitle()">
+          <i class="fa-solid fa-floppy-disk"></i>
+        </button>
     `;
 }
 
 function saveEditedTitle() {
-    const input = document.getElementById('editTitleInput');
-    tripTitle = input.value;
-    renderTrip();
-    manualSaveTrip();
+  const input = document.getElementById('editTitleInput');
+  tripTitle = input.value;
+
+  // Atualiza visualmente o container com novo título
+  const container = document.getElementById('tripTitleDisplay');
+  container.innerHTML = `
+    <span class="trip-title-text">${tripTitle}</span>
+    <button class="trip-title-btn" onclick="editTripTitle()">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+  `;
+
+  // Reatribui o listener ao botão de editar (porque recriou o botão no innerHTML)
+  const editBtn = document.getElementById('editTitleBtn');
+  if (editBtn) {
+    editBtn.addEventListener('click', editTripTitle);
+  }
+
+  // Atualiza outros dados e salva
+  renderTrip();
+  manualSaveTrip();
 }
 
 // CALCULAR TOTAL DE DESPESAS //
@@ -527,4 +561,4 @@ window.onload = () => {
 
 // Limpar o localStorage e apagar infos de viagem
 // Manter a linha abaixo comentada para salvar infos
-// localStorage.clear();
+localStorage.clear();
