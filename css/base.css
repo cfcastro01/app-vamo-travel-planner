@@ -3,6 +3,23 @@
 .container {
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+}
+
+.logout-button {
+    /* margin-left: auto; */
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0 0.5rem;
+    background: none !important;
+    color: #2EC4B6;
+    border: none;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+  color: #27A599;
 }
 
 .logo-container {
@@ -47,6 +64,7 @@
 
 #tripTitleDisplay {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 

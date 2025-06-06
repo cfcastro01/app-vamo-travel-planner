@@ -42,6 +42,41 @@ function getShortWeekday(date) {
 
 // ========== FUNÇÕES PRINCIPAIS ========== //
 
+// javascript/app.js
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ... seu código existente app.js
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                console.log('Usuário deslogado com sucesso!');
+                // Redirecionar para a página de autenticação após o logout
+                window.location.href = 'auth.html';
+            } catch (error) {
+                console.error('Erro ao fazer logout:', error);
+                alert('Erro ao sair. Tente novamente.');
+            }
+        });
+    }
+
+    // IMPORTANTE: Adicione um listener para garantir que só exiba o conteúdo do app
+    // se o usuário estiver logado.
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            // Se o usuário não está logado, redireciona para a página de autenticação
+            window.location.href = 'auth.html';
+        }
+        // Se o usuário está logado, você pode carregar os dados dele aqui
+        // Isso será feito em etapas futuras, ao integrar com o Firestore
+    });
+
+    // ... restante do seu código app.js
+});
+
 // CRIAR/ATUALIZAR VIAGEM //
 function createTrip() {
     const btn = document.querySelector('.controls button');
@@ -82,12 +117,6 @@ for (let i = 0; i < daysCount; i++) {
 function renderTrip() {
   const daysList = document.getElementById('daysList');
     daysList.innerHTML = '';
-
-    // Atualiza título
-    const titleTextSpan = document.querySelector('#tripTitleDisplay .trip-title-text');
-    if (titleTextSpan) {
-        titleTextSpan.textContent = tripTitle;
-}
 
     // Atualiza valor total
     const totalSpan = document.getElementById('tripTotalDisplay');
@@ -561,4 +590,4 @@ window.onload = () => {
 
 // Limpar o localStorage e apagar infos de viagem
 // Manter a linha abaixo comentada para salvar infos
-localStorage.clear();
+// localStorage.clear();

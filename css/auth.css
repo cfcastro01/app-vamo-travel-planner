@@ -1,0 +1,131 @@
+/* css/auth.css */
+
+/*
+  Este arquivo é dedicado aos estilos específicos da página de autenticação (login/cadastro).
+  Ele utiliza e complementa os estilos definidos em global.css e base.css para manter a padronização.
+*/
+
+/* ===== CONTAINER PRINCIPAL DE AUTENTICAÇÃO ===== */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Garante que o contêiner ocupe a altura total da viewport */
+    background: var(--primary-bg-color, #f5f5f5); /* Usa a cor de fundo do body ou fallback */
+    padding: 16px; /* Mantém o padding do body */
+    /* Remove padding do body para esta tela, se necessário */
+    /* body { padding: 0; } em um media query ou estilo mais específico */
+}
+
+/* ===== CAIXA DE AUTENTICAÇÃO (FORMULÁRIO) ===== */
+.auth-box {
+    background: var(--secondary-bg-color, white); /* Cor de fundo branca do global */
+    padding: 24px; /* Padding similar aos modals ou seções */
+    border-radius: 8px; /* Borda arredondada */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    text-align: center;
+    width: 100%;
+    max-width: 400px; /* Largura máxima para a caixa */
+    /* Ajuste de margem para espaçamento vertical, se necessário */
+    margin: 20px auto;
+}
+
+/* Reutiliza o estilo do logo-container de base.css */
+.auth-box .logo-container {
+    margin-bottom: 32px; /* Aumenta um pouco o espaçamento inferior para separar do formulário */
+    display: flex; /* Garante que os itens fiquem na linha */
+    flex-direction: column; /* Alinha o logo e o h1 verticalmente */
+    align-items: center; /* Centraliza o logo e o h1 */
+}
+
+.auth-box .logo-container h1 {
+    text-align: center; /* Garante que o h1 seja centralizado dentro da caixa */
+}
+
+
+/* ===== FORMULÁRIOS DE LOGIN E CADASTRO ===== */
+.auth-form {
+    display: none; /* Esconde os formulários por padrão */
+    flex-direction: column;
+    gap: 16px; /* Espaçamento entre os campos, similar ao de outros formulários */
+}
+
+.auth-form.active {
+    display: flex; /* Mostra o formulário ativo */
+}
+
+.auth-form h2 {
+    margin-bottom: 8px; /* Espaçamento abaixo do título do formulário */
+    color: var(--text-color-dark, #2c3e50); /* Usa a cor de texto padrão */
+}
+
+/* Inputs de texto e senha - reutilizam os estilos globais */
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 100%; /* Ocupa a largura total do contêiner do formulário */
+    /* Estilos de padding, border, border-radius, font-size, etc. vêm de global.css */
+}
+
+/* Botões - reutilizam os estilos globais */
+.auth-form button {
+    width: 100%; /* Ocupa a largura total do contêiner do formulário */
+    margin-top: 8px; /* Espaçamento acima do botão */
+    /* Estilos de background, color, padding, border, etc. vêm de global.css */
+}
+
+.auth-form p {
+    margin-top: 16px; /* Espaçamento acima dos links de "Não tem conta?" */
+    font-size: 0.95rem; /* Ajuste de tamanho de fonte para parágrafos */
+    color: var(--color-grey-dark, #555); /* Cor de texto mais suave */
+}
+
+.auth-form a {
+    color: var(--accent-color, #2EC4B6); /* Cor de link para combinar com os botões principais */
+    text-decoration: none;
+    font-weight: 600; /* Negrito para os links */
+    transition: color 0.3s ease;
+}
+
+.auth-form a:hover {
+    color: var(--accent-hover-color, #27A599); /* Cor de hover para os links */
+    text-decoration: underline;
+}
+
+/* ===== MENSAGENS (ERRO/SUCESSO) ===== */
+.message {
+    margin-top: 24px; /* Espaçamento superior */
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: 'Rajdhani', sans-serif; /* Usa a mesma fonte dos textos do app */
+    font-weight: 600;
+    display: none; /* Esconde por padrão, JS mostra */
+}
+
+.message.error {
+    background-color: #ffe0e0; /* Fundo vermelho claro */
+    color: #cc0000; /* Texto vermelho escuro */
+    border: 1px solid #cc0000;
+}
+
+.message.success {
+    background-color: #e0ffe0; /* Fundo verde claro */
+    color: #008000; /* Texto verde escuro */
+    border: 1px solid #008000;
+}
+
+/* ===== RESPONSIVIDADE (SE NECESSÁRIO) ===== */
+@media (max-width: 600px) {
+    .auth-box {
+        padding: 20px;
+        margin: 16px; /* Menos margem nas laterais em telas pequenas */
+    }
+
+    .auth-box .logo-container {
+        margin-bottom: 24px;
+    }
+
+    .auth-form h2 {
+        font-size: 1.8rem; /* Ajuste para telas menores */
+    }
+}
