@@ -80,6 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             registerBtn.disabled = true; // Desabilita o botão para evitar cliques múltiplos
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+
+            // Salvar no Firebase
+            await db.collection('users').doc(user.uid).set({
+                email: user.email,
+                // Adicione outros campos que você queira armazenar para o usuário
+                createdAt: firebase.firestore.FieldValue.serverTimestamp() // Opcional: data de criação
+            });
             showMessage('Cadastro realizado com sucesso! Faça login.', 'success');
             // Opcional: Redirecionar para a tela de login após o cadastro
             registerForm.classList.remove('active');
